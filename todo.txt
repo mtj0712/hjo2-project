@@ -1,0 +1,4 @@
+1. Make scheduler interface
+2. Make schedule database
+3. Use LLM to recommend the best day for a given activity
+4. Use AI to predict future weather

@@ -3,7 +3,7 @@ from models.event import Base
 import requests
 from sqlalchemy import create_engine
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static", static_url_path="/")
 
 weatherapi_key = "721cd28a95b849ff90f32123232403"
 url = "https://api.weatherapi.com/v1/current.json"
@@ -29,6 +29,10 @@ def index():
     print(f'Temperature: {current['temp_c']} degrees Celsius')
     print('Daytime' if current['is_day'] else 'Nighttime')
     return render_template('index.html')
+
+@app.route('/members')
+def members():
+    return {'members': ['Member1', 'Member2', 'Member3']}
 
 if __name__ == '__main__':
     app.run(debug=True)

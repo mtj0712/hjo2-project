@@ -2,11 +2,49 @@
 
 {% block head %}
 <title>Matthew's Project</title>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js"></script>
-<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var current_icon = '{{ current_icon }}';
+        var past_week_icon = {{ past_week_icon | safe }};
+        var next_three_days_icon = {{ next_three_days_icon | safe }};
+
+        var bgImageMap = {};
+
+        const today = new Date();
+        bgImageMap[today.toISOString().slice(0, 10)] = 'url("http:' + current_icon + '")';
+        for (var i = 0; i < 7; i++) {
+            today.setDate(today.getDate() - 1);
+            bgImageMap[today.toISOString().slice(0, 10)] = 'url("http:' + past_week_icon[i] + '")';
+        }
+        today.setDate(today.getDate() + 7);
+        for (var i = 0; i < 3; i++) {
+            today.setDate(today.getDate() + 1);
+            bgImageMap[today.toISOString().slice(0, 10)] = 'url("http:' + next_three_days_icon[i] + '")';
+        }
+
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            dayCellDidMount: function(info) {
+                const dateStr = info.date.getFullYear() + '-'
+                    + String(info.date.getMonth() + 1).padStart(2, '0') + '-'
+                    + String(info.date.getDate()).padStart(2, '0');
+
+                if (bgImageMap[dateStr]) {
+                    info.el.style.backgroundImage = bgImageMap[dateStr];
+                    info.el.classList.add('bg-date');
+                }
+            }
+        });
+        calendar.render();
+    });
+</script>
 {% endblock %}
 
 {% block body %}
+<div id="welcome">Welcome {{ username }}!</div>
 <div id="calendar"></div>
 <div id="copyright">
     Powered by <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a>

@@ -14,7 +14,7 @@ app.secret_key = ''
 app.config['MYSQL_HOST'] = 'hjo2.mysql.pythonanywhere-services.com'
 app.config['MYSQL_USER'] = 'hjo2'
 app.config['MYSQL_PASSWORD'] = '_y?03dh5ReMD'
-app.config['MYSQL_DB'] = 'default'
+app.config['MYSQL_DB'] = 'hjo2$default'
 
 mysql = MySQL(app)
 

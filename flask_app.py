@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 
 app = Flask(__name__, static_folder="static", static_url_path="/")
 
-app.secret_key = ''
+app.secret_key = 'edHHfH3w4L'
 
 app.config['MYSQL_HOST'] = 'hjo2.mysql.pythonanywhere-services.com'
 app.config['MYSQL_USER'] = 'hjo2'

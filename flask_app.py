@@ -74,6 +74,8 @@ def login():
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
         password = request.form['password']
+        print(username)
+        print(password)
 
         hash = password + app.secret_key
         hash = hashlib.sha1(hash.encode())

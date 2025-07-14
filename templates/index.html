@@ -44,7 +44,7 @@
 {% endblock %}
 
 {% block body %}
-<div id="welcome">Welcome {{ username }}!</div>
+<div id="welcome">Welcome {{ username }}! <a href="{{ url_for('logout') }}">Logout</a></div>
 <div id="calendar"></div>
 <div id="copyright">
     Powered by <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a>

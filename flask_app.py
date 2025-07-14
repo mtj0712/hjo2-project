@@ -14,7 +14,7 @@ app.secret_key = ''
 app.config['MYSQL_HOST'] = 'hjo2.mysql.pythonanywhere-services.com'
 app.config['MYSQL_USER'] = 'hjo2'
 app.config['MYSQL_PASSWORD'] = '_y?03dh5ReMD'
-app.config['MYSQL_DB'] = 'hjo2$default'
+app.config['MYSQL_DB'] = 'hjo2$account'
 
 mysql = MySQL(app)
 
@@ -100,7 +100,7 @@ def logout():
    session.pop('username', None)
    return redirect(url_for('login'))
 
-@app.route('/pythonlogin/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     error_msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:

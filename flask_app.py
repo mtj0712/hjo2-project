@@ -6,6 +6,7 @@ import MySQLdb.cursors
 import re
 import requests
 from sqlalchemy import create_engine
+import sys
 
 app = Flask(__name__, static_folder="static", static_url_path="/")
 
@@ -40,33 +41,53 @@ forecast_params = {
 
 @app.route('/')
 def index():
-    if 'loggedin' in session:
-        realtime_response = requests.get(url=realtime_url, params=realtime_params)
-        realtime_data = realtime_response.json()
-        current_icon = realtime_data['current']['condition']['icon']
+    if 'loggedin' not in session:
+        return redirect(url_for('login'))
 
-        past_week_icon = []
-        next_three_days_icon = []
+    username = session['username']
+    today = date.today()
 
-        for i in range(1, 8):
-            history_params['dt'] = str(date.today() - timedelta(days=i))
-            history_response = requests.get(url=history_url, params=history_params)
-            history_data = history_response.json()
-            past_week_icon.append(history_data['forecast']['forecastday'][0]['day']['condition']['icon'])
+    realtime_response = requests.get(url=realtime_url, params=realtime_params)
+    realtime_data = realtime_response.json()
+    current_icon = realtime_data['current']['condition']['icon']
 
-        for i in range(1, 4):
-            forecast_params['dt'] = str(date.today() + timedelta(days=i))
-            forecast_response = requests.get(url=forecast_url, params=forecast_params)
-            forecast_data = forecast_response.json()
-            next_three_days_icon.append(forecast_data['forecast']['forecastday'][0]['day']['condition']['icon'])
+    past_week_icon = []
+    next_three_days_icon = []
 
-        return render_template('index.html',
-                               username=session['username'],
-                               current_icon=current_icon,
-                               past_week_icon=past_week_icon,
-                               next_three_days_icon=next_three_days_icon)
+    for i in range(1, 8):
+        history_params['dt'] = str(today - timedelta(days=i))
+        history_response = requests.get(url=history_url, params=history_params)
+        history_data = history_response.json()
+        past_week_icon.append(history_data['forecast']['forecastday'][0]['day']['condition']['icon'])
 
-    return redirect(url_for('login'))
+    for i in range(1, 4):
+        forecast_params['dt'] = str(today + timedelta(days=i))
+        forecast_response = requests.get(url=forecast_url, params=forecast_params)
+        forecast_data = forecast_response.json()
+        next_three_days_icon.append(forecast_data['forecast']['forecastday'][0]['day']['condition']['icon'])
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT * FROM events WHERE account_id = %s AND start_time < %s '
+        'AND ((start_time >= %s AND end_time = NULL) OR end_time >= %s)',
+        (
+            username,
+            str((today.replace(day=1) + timedelta(days=31)).replace(day=1)) + ' 00:00:00',
+            str(today.replace(day=1)) + ' 00:00:00',
+            str(today.replace(day=1)) + ' 00:00:00'
+        )
+    )
+
+    events = cursor.fetchall()
+
+    if events:
+        sys.stderr.write(str(events) + '\n')
+
+    return render_template('index.html',
+                            username=username,
+                            current_icon=current_icon,
+                            past_week_icon=past_week_icon,
+                            next_three_days_icon=next_three_days_icon)
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():

@@ -81,13 +81,14 @@ def index():
     events = cursor.fetchall()
 
     if events:
-        sys.stderr.write(str(events) + '\n')
+        pass
 
     return render_template('index.html',
                             username=username,
                             current_icon=current_icon,
                             past_week_icon=past_week_icon,
-                            next_three_days_icon=next_three_days_icon)
+                            next_three_days_icon=next_three_days_icon,
+                            debug=str(events))
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():

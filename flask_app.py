@@ -68,8 +68,8 @@ def index():
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
-        'SELECT * FROM events WHERE account_id = %s AND start_time < \'%s\' '
-        'AND ((start_time >= \'%s\' AND end_time = NULL) OR end_time >= \'%s\')',
+        'SELECT * FROM events WHERE account_id = %s AND start_time < %s '
+        'AND ((start_time >= %s AND end_time = NULL) OR end_time >= %s)',
         (
             username,
             str((today.replace(day=1) + timedelta(days=31)).replace(day=1)) + ' 00:00:00',

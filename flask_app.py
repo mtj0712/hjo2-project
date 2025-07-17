@@ -44,7 +44,6 @@ def index():
     if 'loggedin' not in session:
         return redirect(url_for('login'))
 
-    username = session['username']
     today = date.today()
 
     realtime_response = requests.get(url=realtime_url, params=realtime_params)
@@ -71,7 +70,7 @@ def index():
         'SELECT * FROM events WHERE account_id = %s AND start_time < %s '
         'AND ((start_time >= %s AND end_time = NULL) OR end_time >= %s)',
         (
-            username,
+            session['id'],
             str((today.replace(day=1) + timedelta(days=31)).replace(day=1)) + ' 00:00:00',
             str(today.replace(day=1)) + ' 00:00:00',
             str(today.replace(day=1)) + ' 00:00:00'

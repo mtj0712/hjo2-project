@@ -83,7 +83,7 @@ def index():
         pass
 
     return render_template('index.html',
-                            username=username,
+                            username=session['username'],
                             current_icon=current_icon,
                             past_week_icon=past_week_icon,
                             next_three_days_icon=next_three_days_icon,

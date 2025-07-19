@@ -9,6 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        import bootstrap5Plugin from '@fullcalendar/bootstrap5'
         var current_icon = '{{ current_icon }}';
         var past_week_icon = {{ past_week_icon | safe }};
         var next_three_days_icon = {{ next_three_days_icon | safe }};
@@ -29,7 +30,7 @@
 
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: [FullCalendar.bootstrap5Plugin],
+            plugins: [bootstrap5Plugin],
             themeSystem: 'bootstrap5',
             initialView: 'dayGridMonth',
             bootstrapFontAwesome: false,

@@ -7,6 +7,8 @@
     max-width: 500px;
     max-height: 800px;
     padding: 10px;
+    border: 5px solid lightgray;
+    border-radius: 5px;;
     position: fixed;
     bottom: 0;
     right: 15px;
@@ -16,10 +18,13 @@
 
 .form-container input[type=text], .form-container textarea {
     width: 100%;
+}
+
+.form-container input, .form-container textarea {
     padding: 15px;
     margin: 5px 0 22px 0;
     border: none;
-    background: #f1f1f1;
+    background: lightgray;
 }
 
 .form-container button {
@@ -32,10 +37,10 @@
     opacity: 0.8;
 }
 
-.form-container button[type="submit"] {
+.form-container button[type=submit] {
     background-color: green;
 }
 
-.form-container button[type="button"] {
+.form-container button[type=button] {
     background-color: red;
 }

@@ -8,6 +8,7 @@
     bottom: 0;
     right: 15px;
     z-index: 9;
+    background-color: white;
 }
 
 .form-container {
@@ -15,7 +16,6 @@
     padding: 10px;
 }
 
-/* Full-width input fields */
 .form-container input[type=text], .form-container textarea {
     width: 100%;
     padding: 15px;
@@ -24,9 +24,7 @@
     background: #f1f1f1;
 }
 
-/* Set a style for the submit/login button */
 .form-container button {
-    background-color: #04AA6D;
     color: white;
     padding: 16px 20px;
     border: none;
@@ -34,4 +32,12 @@
     width: 100%;
     margin-bottom:10px;
     opacity: 0.8;
+}
+
+.form-container button[type="submit"] {
+    background-color: green;
+}
+
+.form-container button[type="button"] {
+    background-color: red;
 }

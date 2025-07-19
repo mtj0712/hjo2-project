@@ -16,6 +16,10 @@
     background-color: white;
 }
 
+.form-container h1 {
+    text-align: center;
+}
+
 .form-container input[type=text], .form-container textarea {
     width: 100%;
 }

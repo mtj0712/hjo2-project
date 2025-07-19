@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 import hashlib
@@ -68,7 +68,7 @@ def index():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(
         'SELECT * FROM events WHERE account_id = %s AND start_time < %s '
-        'AND ((start_time >= %s AND end_time = NULL) OR end_time >= %s)',
+        'AND ((start_time >= %s AND end_time IS NULL) OR end_time >= %s)',
         (
             session['id'],
             str((today.replace(day=1) + timedelta(days=31)).replace(day=1)) + ' 00:00:00',
@@ -78,18 +78,71 @@ def index():
     )
 
     events = cursor.fetchall()
-
-    if events:
-        pass
+    events = list(events) if events else []
 
     return render_template('index.html',
                             username=session['username'],
                             current_icon=current_icon,
                             past_week_icon=past_week_icon,
-                            next_three_days_icon=next_three_days_icon)
+                            next_three_days_icon=next_three_days_icon,
+                            events=events)
 
 @app.route('/addEvent', methods=['POST'])
 def addEvent():
+    if 'loggedin' not in session:
+        return redirect(url_for('login'))
+
+    title = request.form['title']
+    description = request.form['description'] if 'description' in request.form else None
+    startTime = request.form['startTime']
+    endTime = request.form['endTime'] if 'endTime' in request.form else None
+
+    # make sure the byte size of the title is between 1 and 255, inclusive
+    if len(title.encode('utf-8')) > 255 or len(title) == 0:
+        return redirect(url_for('index', title_too_long=True))
+
+    # make sure the time strings are in proper format
+    try:
+        startTime = datetime.fromisoformat(startTime)
+        if endTime:
+            endTime = datetime.fromisoformat(endTime)
+    except ValueError:
+        return redirect(url_for('index', time_format_wrong=True))
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    if endTime:
+        # make sure the end time comes after the start time
+        if endTime <= startTime:
+            return redirect(url_for('index', time_order_out=True))
+
+        startTime = startTime.isoformat().replace('T', ' ', 1)
+        endTime = endTime.isoformat().replace('T', ' ', 1)
+
+        if description:
+            cursor.execute(
+                'INSERT INTO events (account_id, title, start_time, end_time, description) VALUES (%s, %s, \'%s\', \'%s\', %s)',
+                (session['id'], title, startTime, endTime, description)
+            )
+        else:
+            cursor.execute(
+                'INSERT INTO events (account_id, title, start_time, end_time) VALUES (%s, %s, \'%s\', \'%s\')',
+                (session['id'], title, startTime, endTime)
+            )
+    else:
+        startTime = startTime.isoformat().replace('T', ' ', 1)
+
+        if description:
+            cursor.execute(
+                'INSERT INTO events (account_id, title, start_time, description) VALUES (%s, %s, \'%s\', %s)',
+                (session['id'], title, startTime, description)
+            )
+        else:
+            cursor.execute(
+                'INSERT INTO events (account_id, title, start_time) VALUES (%s, %s, \'%s\')',
+                (session['id'], title, startTime)
+            )
+
     return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -115,6 +168,7 @@ def login():
             return redirect(url_for('index'))
         else:
             error_msg = 'Incorrect username/password!'
+
     return render_template('login.html', error_msg=error_msg)
 
 @app.route('/logout')
@@ -122,6 +176,7 @@ def logout():
    session.pop('loggedin', None)
    session.pop('id', None)
    session.pop('username', None)
+
    return redirect(url_for('login'))
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -153,6 +208,7 @@ def register():
             error_msg = 'You have successfully registered!'
     elif request.method == 'POST':
         error_msg = 'Please fill out the form!'
+
     return render_template('register.html', error_msg=error_msg)
 
 if __name__ == '__main__':

@@ -6,9 +6,13 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@6.1.18/index.global.min.js"></script>
 <script>
+    // TODO: limit title size to 255 bytes
+    // TODO: make sure end time comes after begin time
     var current_icon = '{{ current_icon }}';
     var past_week_icon = {{ past_week_icon | safe }};
     var next_three_days_icon = {{ next_three_days_icon | safe }};
+
+    var events = {{ events }};
 
     var bgImageMap = {};
 

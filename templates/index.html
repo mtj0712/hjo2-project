@@ -8,8 +8,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js"></script>
 <script>
+    import bootstrap5Plugin from '@fullcalendar/bootstrap5'
     document.addEventListener('DOMContentLoaded', function() {
-        import bootstrap5Plugin from '@fullcalendar/bootstrap5'
         var current_icon = '{{ current_icon }}';
         var past_week_icon = {{ past_week_icon | safe }};
         var next_three_days_icon = {{ next_three_days_icon | safe }};

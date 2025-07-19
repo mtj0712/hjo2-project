@@ -88,7 +88,7 @@ def index():
                             past_week_icon=past_week_icon,
                             next_three_days_icon=next_three_days_icon)
 
-@app.route('/addEvent')
+@app.route('/addEvent', methods=['POST'])
 def addEvent():
     return redirect(url_for('index'))
 

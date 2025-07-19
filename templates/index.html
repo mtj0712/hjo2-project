@@ -31,18 +31,14 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             themeSystem: 'bootstrap5',
-            buttonIcons: {
-                prev: 'bi-chevron-left',
-                next: 'bi-chevron-right',
-                myCustomButton: 'bi-plus-lg'
-            },
             bootstrapFontAwesome: false,
             customButtons: {
                 myCustomButton: {
                     text: 'Custom',
                     click: function(mouseEvent, htmlElement) {
                         alert('Clicked the custom button.');
-                    }
+                    },
+                    icon: 'plus-lg'
                 }
             },
             headerToolbar: {

@@ -30,19 +30,23 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             themeSystem: 'bootstrap5',
+            buttonIcons: {
+                prev: 'arrow-left',
+                next: 'arrow-right',
+                myCustomButton: 'plus'
+            },
             customButtons: {
                 myCustomButton: {
                     text: 'Custom',
                     click: function(mouseEvent, htmlElement) {
                         alert('Clicked the custom button.');
-                    },
-                    icon: 'plus'
+                    }
                 }
             },
             headerToolbar: {
                 left: 'prev,next today myCustomButton',
                 center: 'title',
-                right: 'dayGridMonth, timeGridWeek'
+                right: 'dayGridMonth,timeGridWeek'
             },
             dayCellDidMount: function(info) {
                 const dateStr = info.date.getFullYear() + '-'

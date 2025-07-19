@@ -86,8 +86,7 @@ def index():
                             username=session['username'],
                             current_icon=current_icon,
                             past_week_icon=past_week_icon,
-                            next_three_days_icon=next_three_days_icon,
-                            debug=str(events))
+                            next_three_days_icon=next_three_days_icon)
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():

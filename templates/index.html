@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js"></script>
 <script>
-    var debug_data = "{{ debug }}"
     document.addEventListener('DOMContentLoaded', function() {
         var current_icon = '{{ current_icon }}';
         var past_week_icon = {{ past_week_icon | safe }};
@@ -28,6 +27,21 @@
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
+            themeSystem: 'bootstrap5',
+            customButtons: {
+                myCustomButton: {
+                    text: 'Custom',
+                    click: function(mouseEvent, htmlElement) {
+                        alert('Clicked the custom button.');
+                    },
+                    icon: 'plus'
+                }
+            },
+            headerToolbar: {
+                left: 'prev,next today myCustomButton',
+                center: 'title',
+                right: 'dayGridMonth, timeGridWeek'
+            },
             dayCellDidMount: function(info) {
                 const dateStr = info.date.getFullYear() + '-'
                     + String(info.date.getMonth() + 1).padStart(2, '0') + '-'

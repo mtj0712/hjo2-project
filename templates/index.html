@@ -65,16 +65,22 @@
 <div id="calendar"></div>
 <div class="form-popup" id="addEventForm">
     <form action="{{ url_for('addEvent') }}" method="post" class="form-container">
-        <h1>Add Event</h1>
+        <h1>New Event</h1>
 
-        <label for="email"><b>Email</b></label>
-        <input type="text" placeholder="Enter Email" name="email" required>
+        <label for="title"><b>Title</b></label>
+        <input type="text" placeholder="Enter Title" name="title" required>
 
-        <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
+        <label for="description"><b>Description</b></label>
+        <textarea name="description" rows="4" cols="50"></textarea>
 
-        <button type="submit" class="btn">Login</button>
-        <button type="button" class="btn cancel"
+        <label for="startTime"><b>Start Time</b></label>
+        <input type="datetime-local" name="startTime" required>
+
+        <label for="endTime"><b>End Time</b></label>
+        <input type="datetime-local" name="endTime">
+
+        <button type="submit">Add Event</button>
+        <button type="button"
             onclick="document.getElementById('addEventForm').style.display = 'none'">Close</button>
     </form>
 </div>

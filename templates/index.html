@@ -29,8 +29,9 @@
 
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
+            plugins: [FullCalendar.bootstrap5Plugin],
             themeSystem: 'bootstrap5',
+            initialView: 'dayGridMonth',
             bootstrapFontAwesome: false,
             customButtons: {
                 myCustomButton: {

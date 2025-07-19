@@ -88,7 +88,11 @@ def index():
                             past_week_icon=past_week_icon,
                             next_three_days_icon=next_three_days_icon)
 
-@app.route('/login/', methods=['GET', 'POST'])
+@app.route('/addEvent')
+def addEvent():
+    return redirect(url_for('index'))
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     error_msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:

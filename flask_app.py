@@ -126,12 +126,12 @@ def addEvent():
 
         if description:
             cursor.execute(
-                'INSERT INTO events (account_id, title, start_time, end_time, description) VALUES (%s, %s, \'%s\', \'%s\', %s)',
+                'INSERT INTO events (account_id, title, start_time, end_time, description) VALUES (%s, %s, %s, %s, %s)',
                 (session['id'], title, startTime, endTime, description)
             )
         else:
             cursor.execute(
-                'INSERT INTO events (account_id, title, start_time, end_time) VALUES (%s, %s, \'%s\', \'%s\')',
+                'INSERT INTO events (account_id, title, start_time, end_time) VALUES (%s, %s, %s, %s)',
                 (session['id'], title, startTime, endTime)
             )
     else:
@@ -139,12 +139,12 @@ def addEvent():
 
         if description:
             cursor.execute(
-                'INSERT INTO events (account_id, title, start_time, description) VALUES (%s, %s, \'%s\', %s)',
+                'INSERT INTO events (account_id, title, start_time, description) VALUES (%s, %s, %s, %s)',
                 (session['id'], title, startTime, description)
             )
         else:
             cursor.execute(
-                'INSERT INTO events (account_id, title, start_time) VALUES (%s, %s, \'%s\')',
+                'INSERT INTO events (account_id, title, start_time) VALUES (%s, %s, %s)',
                 (session['id'], title, startTime)
             )
 

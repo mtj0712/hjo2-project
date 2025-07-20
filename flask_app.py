@@ -91,6 +91,7 @@ def index():
     )
 
     events = cursor.fetchall()
+    cursor.close()
     events = list(events) if events else []
     for e in events:
         e['start_time'] = e['start_time'].isoformat()
@@ -168,7 +169,9 @@ def addEvent():
                 (session['id'], title, startTime)
             )
 
-    cursor.fetchall()
+    mysql.connection.commit()
+
+    cursor.close()
 
     return redirect(url_for('index'))
 
@@ -187,6 +190,8 @@ def login():
         cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
 
         account = cursor.fetchone()
+
+        cursor.close()
 
         if account:
             session['loggedin'] = True
@@ -233,6 +238,8 @@ def register():
             cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s)', (username, password, email,))
             mysql.connection.commit()
             error_msg = 'You have successfully registered!'
+
+        cursor.close()
     elif request.method == 'POST':
         error_msg = 'Please fill out the form!'
 

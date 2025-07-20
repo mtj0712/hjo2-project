@@ -168,6 +168,8 @@ def addEvent():
                 (session['id'], title, startTime)
             )
 
+    cursor.fetchall()
+
     return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])

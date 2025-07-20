@@ -16,6 +16,18 @@
 
     var events = {{ events | safe }};
 
+    events.forEach(e => {
+        delete e.account_id;
+        e.id = e.id.toString();
+        e.startStr = e.start_time;
+        delete e.start_time;
+        if (e.end_time !== "null") {
+            e.endStr = e.end_time;
+        }
+        delete e.end_time;
+
+    });
+
     var bgImageMap = {};
 
     const today = new Date();
@@ -54,6 +66,7 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek'
             },
+            events: events,
             dayCellDidMount: function(info) {
                 const dateStr = info.date.getFullYear() + '-'
                     + String(info.date.getMonth() + 1).padStart(2, '0') + '-'

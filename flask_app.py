@@ -44,15 +44,15 @@ def index():
     if 'loggedin' not in session:
         return redirect(url_for('login'))
 
-    if 'title_missing' in request.form:
+    if 'title_missing' in request.args:
         alert_message = 'The event title is missing!'
-    elif 'start_time_missing' in request.form:
+    elif 'start_time_missing' in request.args:
         alert_message = 'The event start time is missing!'
-    elif 'title_too_long' in request.form:
+    elif 'title_too_long' in request.args:
         alert_message = 'The event title is too long!'
-    elif 'time_format_wrong' in request.form:
+    elif 'time_format_wrong' in request.args:
         alert_message = 'Your time format is wrong!'
-    elif 'time_order_out' in request.form:
+    elif 'time_order_out' in request.args:
         alert_message = 'Your end time must come after your begin time!'
     else:
         alert_message = ''

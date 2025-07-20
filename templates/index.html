@@ -68,6 +68,7 @@
             },
             events: events,
             eventClick: function(info) {
+                console.log(info);
                 alert(info.event.title);
 
                 if (info.event.description.length != 0) {

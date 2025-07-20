@@ -68,11 +68,18 @@
             },
             events: events,
             eventClick: function(info) {
-                console.log(info);
                 alert(info.event.title);
 
-                if (info.event.description.length != 0) {
-                    alert(info.event.description);
+                var description = '';
+                for (let e in events) {
+                    if (e.id == info.event.id) {
+                        description = e.description;
+                        break;
+                    }
+                }
+
+                if (description.length != 0) {
+                    alert(description);
                 }
 
                 if (confirm('Would you like to delete this event?')) {

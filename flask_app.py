@@ -95,9 +95,9 @@ def index():
     events = list(events) if events else []
     for e in events:
         e['start_time'] = e['start_time'].isoformat()
-        e['end_time'] = 'null' if e['end_time'] is None else e['end_time'].isoformat()
+        e['end_time'] = '' if e['end_time'] is None else e['end_time'].isoformat()
         if e['description'] is None:
-            e['description'] = 'null'
+            e['description'] = ''
 
     return render_template('index.html',
                             username=session['username'],

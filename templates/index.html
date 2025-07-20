@@ -21,7 +21,7 @@
         e.id = e.id.toString();
         e.start = e.start_time;
         delete e.start_time;
-        if (e.end_time !== "null") {
+        if (e.end_time.length != 0) {
             e.end = e.end_time;
         }
         delete e.end_time;
@@ -67,6 +67,12 @@
                 right: 'dayGridMonth,timeGridWeek'
             },
             events: events,
+            eventClick: function(info) {
+                alert(info.event.title);
+                if (info.event.description.length != 0) {
+                    alert(info.event.description);
+                }
+            },
             dayCellDidMount: function(info) {
                 const dateStr = info.date.getFullYear() + '-'
                     + String(info.date.getMonth() + 1).padStart(2, '0') + '-'

@@ -19,10 +19,10 @@
     events.forEach(e => {
         delete e.account_id;
         e.id = e.id.toString();
-        e.startStr = e.start_time;
+        e.start = e.start_time;
         delete e.start_time;
         if (e.end_time !== "null") {
-            e.endStr = e.end_time;
+            e.end = e.end_time;
         }
         delete e.end_time;
 

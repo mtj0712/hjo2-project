@@ -8,6 +8,8 @@
 <script>
     // TODO: limit title size to 255 bytes
     // TODO: make sure end time comes after begin time
+    var alert_message = '{{ alert_message }}';
+
     var current_icon = '{{ current_icon }}';
     var past_week_icon = {{ past_week_icon | safe }};
     var next_three_days_icon = {{ next_three_days_icon | safe }};
@@ -29,6 +31,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        if (alert_message.length != 0) {
+            alert(alert_message);
+        }
+
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             themeSystem: 'bootstrap5',

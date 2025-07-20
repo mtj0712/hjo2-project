@@ -44,6 +44,19 @@ def index():
     if 'loggedin' not in session:
         return redirect(url_for('login'))
 
+    if 'title_missing' in request.form:
+        alert_message = 'The event title is missing!'
+    elif 'start_time_missing' in request.form:
+        alert_message = 'The event start time is missing!'
+    elif 'title_too_long' in request.form:
+        alert_message = 'The event title is too long!'
+    elif 'time_format_wrong' in request.form:
+        alert_message = 'Your time format is wrong!'
+    elif 'time_order_out' in request.form:
+        alert_message = 'Your end time must come after your begin time!'
+    else:
+        alert_message = ''
+
     today = date.today()
 
     realtime_response = requests.get(url=realtime_url, params=realtime_params)
@@ -90,7 +103,8 @@ def index():
                             current_icon=current_icon,
                             past_week_icon=past_week_icon,
                             next_three_days_icon=next_three_days_icon,
-                            events=events)
+                            events=events,
+                            alert_message=alert_message)
 
 @app.route('/addEvent', methods=['POST'])
 def addEvent():
@@ -98,12 +112,18 @@ def addEvent():
         return redirect(url_for('login'))
 
     title = request.form['title']
-    description = request.form['description'] if 'description' in request.form else None
+    description = request.form['description']
     startTime = request.form['startTime']
-    endTime = request.form['endTime'] if 'endTime' in request.form else None
+    endTime = request.form['endTime']
+
+    if not title:
+        return redirect(url_for('index', title_missing=True))
+
+    if not startTime:
+        return redirect(url_for('index', start_time_missing=True))
 
     # make sure the byte size of the title is between 1 and 255, inclusive
-    if len(title.encode('utf-8')) > 255 or len(title) == 0:
+    if len(title.encode('utf-8')) > 255:
         return redirect(url_for('index', title_too_long=True))
 
     # make sure the time strings are in proper format

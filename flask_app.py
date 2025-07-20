@@ -175,6 +175,20 @@ def addEvent():
 
     return redirect(url_for('index'))
 
+@app.route('/removeEvent', methods=['POST'])
+def removeEvent():
+    if 'loggedin' not in session:
+        return redirect(url_for('login'))
+
+    eventId = request.form['id']
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('DELETE FROM events WHERE id=%s', (eventId,))
+    mysql.connection.commit()
+    cursor.close()
+
+    return ''
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error_msg = ''

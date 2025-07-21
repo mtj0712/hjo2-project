@@ -89,21 +89,20 @@
                         { method: 'POST' }
                     )
                     .then((response) => {
-                        try {
-                            if (!response.ok) {
-                                throw new Error(`Response status: ${response.status}`);
-                            }
-
-                            const blob = response.blob();
-
-                            if (blob.length != 0) {
-                                throw new Error(`Error message: ${blob}`);
-                            }
-
-                            location.reload();
-                        } catch (error) {
-                            alert(error);
+                        if (!response.ok) {
+                            throw new Error(`Response status: ${response.status}`);
                         }
+
+                        const blob = response.blob();
+
+                        if (blob.length != 0) {
+                            throw new Error(`Error message: ${blob}`);
+                        }
+
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        alert(error);
                     });    
                 }
             },

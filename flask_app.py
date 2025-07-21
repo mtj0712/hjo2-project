@@ -179,6 +179,9 @@ def addEvent():
 def removeEvent():
     if 'loggedin' not in session:
         return redirect(url_for('login'))
+    
+    if 'id' not in request.form:
+        return redirect(url_for('index'))
 
     eventId = request.form['id']
 

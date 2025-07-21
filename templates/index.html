@@ -84,8 +84,11 @@
 
                 if (confirm('Would you like to delete this event?')) {
                     fetch(
-                        `{{ url_for("removeEvent") }}?id=${info.event.id}`,
-                        { method: 'POST' }
+                        `{{ url_for("removeEvent") }}`,
+                        {
+                            method: 'POST',
+                            body: new URLSearchParams({ id: info.event.id })
+                        }
                     )
                     .then((response) => {
                         if (!response.ok) {

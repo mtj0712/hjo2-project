@@ -95,12 +95,12 @@
                             throw new Error(`Response status: ${response.status}`);
                         }
 
-                        const blob = response.blob();
-
-                        if (blob.length != 0) {
-                            throw new Error(`Error message: ${blob}`);
+                        return response.text();
+                    })
+                    .then((responseText) => {
+                        if (responseText.length != 0) {
+                            throw new Error(responseText);
                         }
-
                         location.reload();
                     })
                     .catch((error) => {

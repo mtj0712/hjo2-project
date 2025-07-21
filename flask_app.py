@@ -2,6 +2,7 @@ from datetime import date, datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 import hashlib
+import json
 import MySQLdb.cursors
 import re
 import requests
@@ -92,6 +93,7 @@ def index():
 
     events = cursor.fetchall()
     cursor.close()
+
     events = list(events) if events else []
     for e in events:
         e['start_time'] = e['start_time'].isoformat()
@@ -106,6 +108,53 @@ def index():
                             next_three_days_icon=next_three_days_icon,
                             events=events,
                             alert_message=alert_message)
+
+@app.route('/getEvents', methods=['POST'])
+def getEvents():
+    if 'loggedin' not in session:
+        return 'ERROR: not logged in'
+
+    if 'start' not in request.form:
+        return 'ERROR: start date not provided'
+
+    if 'end' not in request.form:
+        return 'ERROR: end date not provided'
+
+    start = request.form['start']
+    end = request.form['end']
+
+    try:
+        date.fromisoformat(start)
+        date.fromisoformat(end)
+    except ValueError:
+        return 'ERROR: invalid date format'
+
+    if end <= start:
+        return 'ERROR: end date comes after start date'
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(
+        'SELECT * FROM events WHERE account_id = %s AND start_time < %s '
+        'AND ((start_time >= %s AND end_time IS NULL) OR end_time >= %s)',
+        (
+            session['id'],
+            end + ' 00:00:00',
+            start + ' 00:00:00',
+            start + ' 00:00:00'
+        )
+    )
+
+    events = cursor.fetchall()
+    cursor.close()
+
+    events = list(events) if events else []
+    for e in events:
+        e['start_time'] = e['start_time'].isoformat()
+        e['end_time'] = '' if e['end_time'] is None else e['end_time'].isoformat()
+        if e['description'] is None:
+            e['description'] = ''
+    
+    return json.dumps(events, separators=(',', ':'))
 
 @app.route('/addEvent', methods=['POST'])
 def addEvent():

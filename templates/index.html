@@ -25,7 +25,6 @@
             e.end = e.end_time;
         }
         delete e.end_time;
-
     });
 
     var bgImageMap = {};
@@ -58,13 +57,61 @@
                     click: function() {
                         calendar.getEvents().forEach((e) => e.remove());
                         calendar.prev();
+                        // retrieve events from the server
+                        var start = calendar.view.activeStart.toISOString().slice(0, -14);
+                        var end = calendar.view.activeEnd.toISOString().slice(0, -14);
+                        fetch(
+                            '{{ url_for("getEvents") }}',
+                            {
+                                method: 'POST',
+                                body: new URLSearchParams({
+                                    start: start,
+                                    end: end
+                                })
+                            }
+                        )
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error(`Response status: ${response.status}`);
+                            }
+
+                            return response.text();
+                        })
+                        .then((responseText) => {
+                            if (responseText.startsWith('ERROR')) {
+                                throw new Error(responseText);
+                            }
+
+                            var responseObj;
+                            try {
+                                responseObj = JSON.parse(responseText);
+                            } catch (error) {
+                                throw new Error('Invalid response from the server');
+                            }
+
+                            responseObj.forEach(e => {
+                                delete e.account_id;
+                                e.id = e.id.toString();
+                                e.start = e.start_time;
+                                delete e.start_time;
+                                if (e.end_time.length != 0) {
+                                    e.end = e.end_time;
+                                }
+                                delete e.end_time;
+
+                                calendar.addEvent(e);
+                            });
+                        })
+                        .catch((error) => {
+                            alert(error);
+                        });
                     },
                     icon: 'chevron-left'
                 },
                 customNext: {
                     text: 'next',
                     click: function() {
-                        calendar.getEventSources();
+                        calendar.getEvents().forEach((e) => e.remove());
                         calendar.next();
                     },
                     icon: 'chevron-right'
@@ -100,7 +147,7 @@
 
                 if (confirm('Would you like to delete this event?')) {
                     fetch(
-                        `{{ url_for("removeEvent") }}`,
+                        '{{ url_for("removeEvent") }}',
                         {
                             method: 'POST',
                             body: new URLSearchParams({ id: info.event.id })

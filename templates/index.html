@@ -53,6 +53,20 @@
             initialView: 'dayGridMonth',
             bootstrapFontAwesome: false,
             customButtons: {
+                customPrev: {
+                    text: 'previous',
+                    click: function() {
+                        calendar.prev();
+                    },
+                    icon: 'chevron-left'
+                },
+                customNext: {
+                    text: 'next',
+                    click: function() {
+                        calendar.next();
+                    },
+                    icon: 'chevron-right'
+                },
                 addEvent: {
                     text: 'add event',
                     click: function() {
@@ -62,7 +76,7 @@
                 }
             },
             headerToolbar: {
-                left: 'prev,next today addEvent',
+                left: 'customPrev,customNext today addEvent',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek'
             },

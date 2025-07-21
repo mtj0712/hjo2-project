@@ -183,7 +183,7 @@ def removeEvent():
     eventId = request.form['id']
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('DELETE FROM events WHERE id=%s', (eventId,))
+    cursor.execute('DELETE FROM events WHERE id = %s', (eventId,))
     mysql.connection.commit()
     cursor.close()
 

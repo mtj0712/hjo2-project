@@ -83,12 +83,13 @@
                 }
 
                 if (confirm('Would you like to delete this event?')) {
-                    try {
-                        fetch('{{ url_for("removeEvent") }}', {
-                            method: 'POST',
-                            body: JSON.stringify({ id: info.event.id })
-                        })
-                        .then((response) => {
+                    fetch(
+                        '{{ url_for("removeEvent") }}'
+                        + new URLSearchParams({ id: info.event.id }).toString(),
+                        { method: 'POST' }
+                    )
+                    .then((response) => {
+                        try {
                             if (!response.ok) {
                                 throw new Error(`Response status: ${response.status}`);
                             }
@@ -100,10 +101,10 @@
                             }
 
                             location.reload();
-                        });                        
-                    } catch (error) {
-                        alert(error);
-                    }
+                        } catch (error) {
+                            alert(error);
+                        }
+                    });    
                 }
             },
             dayCellDidMount: function(info) {

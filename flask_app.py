@@ -178,10 +178,10 @@ def addEvent():
 @app.route('/removeEvent', methods=['POST'])
 def removeEvent():
     if 'loggedin' not in session:
-        return redirect(url_for('login'))
+        return 'Not logged in'
     
     if 'id' not in request.form:
-        return redirect(url_for('index'))
+        return 'No id given'
 
     eventId = request.form['id']
 

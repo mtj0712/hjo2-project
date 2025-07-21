@@ -56,7 +56,9 @@
                 customPrev: {
                     text: 'previous',
                     click: function() {
-                        console.log(calendar.getEventSources());
+                        for (let e in calendar.getEventSources()) {
+                            e.remove();
+                        }
                         calendar.prev();
                     },
                     icon: 'chevron-left'

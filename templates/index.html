@@ -192,6 +192,8 @@
                 info.el.style.backgroundRepeat = 'no-repeat';
             },
             datesSet: function(dateInfo) {
+                // TODO: make this run when the dates change
+                console.log('datesSet called');
                 if (dateInfo.type === 'timeGridWeek') {
                     for (const slot of calendarEl.getElementsByClassName('fc-timegrid-slot')) {
                         slot.style.height = '3em';

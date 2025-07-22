@@ -2,10 +2,6 @@
     box-sizing: border-box;
 }
 
-.fc-timegrid-slot {
-    height: 3em;
-}
-
 .form-popup {
     display: none;
     max-width: 500px;

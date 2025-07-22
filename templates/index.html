@@ -137,7 +137,6 @@
             allDaySlot: false,
             nowIndicator: true,
             slotDuration: '01:00:00',
-            slotMinHeight: 100,
             events: events,
             eventClick: function(info) {
                 alert(info.event.title);
@@ -209,7 +208,12 @@
                 info.el.style.backgroundRepeat = 'no-repeat';
             }
         });
+
         calendar.render();
+
+        for (const slot of calendarEl.getElementsByClassName('.fc-timegrid-slot')) {
+            slot.style.height = '3em';
+        }
     });
 </script>
 {% endblock %}

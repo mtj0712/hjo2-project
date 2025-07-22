@@ -178,6 +178,7 @@
                 info.el.style.backgroundRepeat = 'no-repeat';
             },
             datesSet: function(dateInfo) {
+                console.log('datesSet called');
                 if (dateInfo.view.type === 'timeGridWeek') {
                     for (const slot of document.getElementsByClassName('fc-timegrid-slot')) {
                         slot.style.height = '3em';

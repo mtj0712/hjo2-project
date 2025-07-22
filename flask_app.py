@@ -79,34 +79,11 @@ def index():
         forecast_data = forecast_response.json()
         next_three_days_icon.append(forecast_data['forecast']['forecastday'][0]['day']['condition']['icon'])
 
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute(
-        'SELECT * FROM events WHERE account_id = %s AND start_time < %s '
-        'AND ((start_time >= %s AND end_time IS NULL) OR end_time >= %s)',
-        (
-            session['id'],
-            str((today.replace(day=1) + timedelta(days=31)).replace(day=1)) + ' 00:00:00',
-            str(today.replace(day=1)) + ' 00:00:00',
-            str(today.replace(day=1)) + ' 00:00:00'
-        )
-    )
-
-    events = cursor.fetchall()
-    cursor.close()
-
-    events = list(events) if events else []
-    for e in events:
-        e['start_time'] = e['start_time'].isoformat()
-        e['end_time'] = '' if e['end_time'] is None else e['end_time'].isoformat()
-        if e['description'] is None:
-            e['description'] = ''
-
     return render_template('index.html',
                             username=session['username'],
                             current_icon=current_icon,
                             past_week_icon=past_week_icon,
                             next_three_days_icon=next_three_days_icon,
-                            events=events,
                             alert_message=alert_message)
 
 @app.route('/getEvents', methods=['POST'])

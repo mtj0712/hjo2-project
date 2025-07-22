@@ -14,19 +14,6 @@
     var past_week_icon = {{ past_week_icon | safe }};
     var next_three_days_icon = {{ next_three_days_icon | safe }};
 
-    var events = {{ events | safe }};
-
-    events.forEach(e => {
-        delete e.account_id;
-        e.id = e.id.toString();
-        e.start = e.start_time;
-        delete e.start_time;
-        if (e.end_time.length != 0) {
-            e.end = e.end_time;
-        }
-        delete e.end_time;
-    });
-
     var bgImageMap = {};
 
     const today = new Date();
@@ -121,7 +108,6 @@
             allDaySlot: false,
             nowIndicator: true,
             slotDuration: '01:00:00',
-            events: events,
             eventClick: function(info) {
                 alert(info.event.title);
 
@@ -192,10 +178,7 @@
                 info.el.style.backgroundRepeat = 'no-repeat';
             },
             datesSet: function(dateInfo) {
-                // TODO: make this run when the dates change
-                console.log(dateInfo.view.type);
                 if (dateInfo.view.type === 'timeGridWeek') {
-                    console.log('timeGridWeek');
                     for (const slot of document.getElementsByClassName('fc-timegrid-slot')) {
                         slot.style.height = '3em';
                     }

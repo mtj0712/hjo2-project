@@ -187,6 +187,24 @@
                     info.el.style.backgroundImage = bgImageMap[dateStr];
                     info.el.classList.add('bg-date');
                 }
+            },
+            slotLaneDidMount: function(info) {
+                switch (info.date.getHours()) {
+                    case 8:
+                        info.el.style.backgroundImage = 'url(\'https://www.shutterstock.com/shutterstock/photos/2317113251/display_1500/stock-vector-yellow-half-sun-icon-in-doodle-style-hand-drawn-sunset-simple-graphic-symbol-summer-heat-icon-2317113251.jpg\')';
+                        break;
+                    case 12:
+                        info.el.style.backgroundImage = 'url(\'https://i.pinimg.com/474x/46/a2/cd/46a2cd17b19cb3d655fbd6a6ed6223f0.jpg\')';
+                        break;
+                    case 18:
+                        info.el.style.backgroundImage = 'url(\'https://t4.ftcdn.net/jpg/01/67/12/13/360_F_167121304_3cdfoBtQGdRrVcnU9hL2J0FlrlXkNJJH.jpg\')';
+                        break;
+                    default:
+                        info.el.style.backgroundImage = 'url(\'https://t3.ftcdn.net/jpg/02/77/30/98/360_F_277309825_h8RvZkoyBGPDocMtippdfe3497xTrOXO.jpg\')';
+                }
+
+                info.el.style.backgroundSize = 'cover';
+                info.el.style.backgroundRepeat = 'no-repeat';
             }
         });
         calendar.render();

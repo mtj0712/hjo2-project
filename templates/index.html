@@ -44,8 +44,8 @@
     function updateCalendar(calendar) {
         calendar.getEvents().forEach((e) => e.remove());
 
-        var start = calendar.view.activeStart.toISOString().slice(0, -14);
-        var end = calendar.view.activeEnd.toISOString().slice(0, -14);
+        var start = calendar.view.currentStart.toISOString().slice(0, -14);
+        var end = calendar.view.currentEnd.toISOString().slice(0, -14);
 
         fetch(
             '{{ url_for("getEvents") }}',
@@ -105,22 +105,6 @@
             initialView: 'dayGridMonth',
             bootstrapFontAwesome: false,
             customButtons: {
-                customPrev: {
-                    text: 'previous',
-                    click: function() {
-                        calendar.prev();
-                        updateCalendar(calendar);
-                    },
-                    icon: 'chevron-left'
-                },
-                customNext: {
-                    text: 'next',
-                    click: function() {
-                        calendar.next();
-                        updateCalendar(calendar);
-                    },
-                    icon: 'chevron-right'
-                },
                 addEvent: {
                     text: 'add event',
                     click: function() {
@@ -130,7 +114,7 @@
                 }
             },
             headerToolbar: {
-                left: 'customPrev,customNext today addEvent',
+                left: 'prev,next today addEvent',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek'
             },
@@ -206,14 +190,18 @@
 
                 info.el.style.backgroundSize = 'cover';
                 info.el.style.backgroundRepeat = 'no-repeat';
+            },
+            datesSet: function(dateInfo) {
+                if (dateInfo.type === 'timeGridWeek') {
+                    for (const slot of calendarEl.getElementsByClassName('fc-timegrid-slot')) {
+                        slot.style.height = '3em';
+                    }
+                }
+                updateCalendar(calendar);
             }
         });
 
         calendar.render();
-
-        for (const slot of document.getElementsByClassName('fc-timegrid-slot')) {
-            slot.style.height = '3em';
-        }
     });
 </script>
 {% endblock %}

@@ -193,6 +193,7 @@
             },
             datesSet: function(dateInfo) {
                 // TODO: make this run when the dates change
+                console.log(dateInfo.type);
                 if (dateInfo.type === 'timeGridWeek') {
                     console.log('timeGridWeek');
                     for (const slot of document.getElementsByClassName('fc-timegrid-slot')) {

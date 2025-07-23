@@ -104,8 +104,6 @@ def index():
         next_three_days_icons.append(forecastday['day']['condition']['icon'])
         for h in forecastday['hour']:
             hourly_weather.append(h)
-    
-    # TODO: provide hour-by-hour weather (forecastday -> hour element)
 
     return render_template('index.html',
                             username=session['username'],

@@ -98,6 +98,8 @@
         }
     ];
 
+    var currentIconEvents = [];
+
     document.addEventListener('DOMContentLoaded', function() {
         if (alert_message.length != 0) {
             alert(alert_message);
@@ -146,17 +148,15 @@
                 console.log('viewDidMount');
                 if (viewInfo.view.type !== 'dayGridMonth') {
                     console.log('timeGridWeek');
-                    calendar.addEventSource(iconEvents);
+                    currentIconEvents = iconEvents.map(e => calendar.addEvent(e));
                 }
             },
             viewWillUnmount: function(viewInfo) {
                 console.log('viewWillUnmount');
                 if (viewInfo.view.type !== 'dayGridMonth') {
                     console.log('timeGridWeek');
-                    iconEvents.forEach(event => {
-                        const e = calendar.getEventById(event.id);
-                        if (e) e.remove();
-                    });
+                    currentIconEvents.forEach(e => e.remove());
+                    currentIconEvents = [];
                 }
             },
             eventClick: function(info) {

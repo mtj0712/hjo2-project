@@ -126,7 +126,8 @@
             nowIndicator: true,
             slotDuration: '01:00:00',
             eventContent: function(arg) {
-                if (arg.event.extendedProps.icon && arg.view.type !== 'dayGridMonth') {
+                console.log('eventContent');
+                if (arg.event.extendedProps.icon) {
                     const imgEl = document.createElement('img');
                     imgEl.src = arg.event.extendedProps.icon;
                     imgEl.style.width = '16px';

@@ -143,9 +143,8 @@
                 }
             },
             viewDidMount: function(viewInfo) {
-                console.log('viewDidMount');
                 if (viewInfo.view.type !== 'dayGridMonth') {
-                    console.log('timeGridWeek');
+                    console.log('timeGridWeek - viewDidMount');
                     currentIconEvents = iconEvents.map(e => {
                         var event_obj = calendar.addEvent(e);
                         console.log('Weather Event Added');
@@ -154,10 +153,12 @@
                 }
             },
             viewWillUnmount: function(viewInfo) {
-                console.log('viewWillUnmount');
                 if (viewInfo.view.type !== 'dayGridMonth') {
-                    console.log('timeGridWeek');
-                    currentIconEvents.forEach(e => e.remove());
+                    console.log('timeGridWeek - viewWillUnmount');
+                    currentIconEvents.forEach(e => {
+                        e.remove();
+                        console.log('Weather Event Removed');
+                    });
                     currentIconEvents = [];
                 }
             },

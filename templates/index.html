@@ -163,12 +163,14 @@
                 }
             },
             slotLaneDidMount: function(info) {
+                console.log(info.date);
                 var time = info.date.getTime();
                 var now = new Date();
                 var first = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7).getTime();
                 var last = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 4).getTime();
 
                 if (first <= time && time < last) {
+                    console.log('Within range!');
                     var i = Math.trunc((time - first) / 3600000);
                     info.el.style.backgroundImage = `url("${hourly_icons[i]}")`;
                     info.el.style.backgroundSize = 'contain';
@@ -176,7 +178,6 @@
                 }
             },
             datesSet: function(dateInfo) {
-                console.log('datesSet called');
                 if (dateInfo.view.type === 'timeGridWeek') {
                     for (const slot of document.getElementsByClassName('fc-timegrid-slot')) {
                         slot.style.height = '3em';

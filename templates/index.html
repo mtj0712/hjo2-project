@@ -142,9 +142,9 @@
             viewDidMount: function(viewInfo) {
                 var e = calendar.getEventById('weather-0');
                 if (viewInfo.view.type === 'dayGridMonth') {
-                    e.display = 'none';
+                    e.setProp('display', 'none');
                 } else {
-                    e.display = 'block';
+                    e.setProp('display', 'block');
                 }
             },
             eventClick: function(info) {

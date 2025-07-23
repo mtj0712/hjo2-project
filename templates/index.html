@@ -127,8 +127,8 @@
             allDaySlot: false,
             nowIndicator: true,
             slotDuration: '01:00:00',
-            eventContent: function(arg) {
-                console.log('eventContent');
+            eventDidMount: function(info) {
+                console.log('eventDidMount');
                 if (arg.event.extendedProps.icon) {
                     const imgEl = document.createElement('img');
                     imgEl.src = arg.event.extendedProps.icon;
@@ -139,10 +139,8 @@
                     imgEl.style.left = '2px';
                     imgEl.style.pointerEvents = 'none';
 
-                    return { domNodes: [imgEl] };
+                    info.el.appendChild(imgEl);
                 }
-
-                return true;
             },
             viewDidMount: function(viewInfo) {
                 console.log('viewDidMount');

@@ -19,12 +19,12 @@
 
     var today = new Date();
     bgImageMap[today.toISOString().slice(0, 10)] = `url("https:${current_icon}")`;
-    for (var i = 1; i <= 7; i++) {
-        var day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+    for (var i = 0; i < 7; i++) {
+        var day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i - 1);
         bgImageMap[`${day.getFullYear().toString().padStart(4, '0')}-${(day.getMonth()+1).toString().padStart(2, '0')}-${day.getDate().toString().padStart(2, '0')}`] = `url("https:${past_week_icons[i]}")`;
     }
-    for (var i = 1; i <= 3; i++) {
-        var day = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+    for (var i = 0; i < 3; i++) {
+        var day = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i + 1);
         bgImageMap[`${day.getFullYear().toString().padStart(4, '0')}-${(day.getMonth()+1).toString().padStart(2, '0')}-${day.getDate().toString().padStart(2, '0')}`] = `url("https:${next_three_days_icons[i]}")`;
     }
 

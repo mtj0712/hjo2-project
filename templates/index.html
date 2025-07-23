@@ -115,7 +115,7 @@
             slotDuration: '01:00:00',
             events: [
                 {
-                    id: 'weather',
+                    id: 'weather-0',
                     start: '2025-07-25T10:00:00',
                     allDay: false,
                     overlap: false,
@@ -147,6 +147,10 @@
                 }
             },
             eventClick: function(info) {
+                if (info.event.extendedProps.icon) {
+                    return;
+                }
+
                 alert(info.event.title);
 
                 var description = '';

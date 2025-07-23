@@ -146,7 +146,7 @@
                 if (viewInfo.view.type !== 'dayGridMonth') {
                     console.log('timeGridWeek - viewDidMount');
                     currentIconEvents = iconEvents.map(e => {
-                        var event_obj = calendar.addEvent(e);
+                        var event_obj = calendar.addEventSource([e]);
                         console.log('Weather Event Added');
                         return event_obj;
                     });

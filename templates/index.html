@@ -42,6 +42,15 @@
             display: 'background',
             icon: 'https:' + hourly_weather[i].condition.icon,
             temp: hourly_weather[i].temp_c,
+            windSpeed: hourly_weather[i].wind_kph,
+            windDegree: hourly_weather[i].wind_degree,
+            windDir: hourly_weather[i].wind_dir,
+            humidity: hourly_weather[i].humidity,
+            precip: hourly_weather[i].precip_mm,
+            chanceOfRain: hourly_weather[i].chance_of_rain,
+            snow: hourly_weather[i].snow_cm,
+            chanceOfSnow: hourly_weather[i].chance_of_snow,
+            cloud: hourly_weather[i].cloud,
             backgroundColor: 'white'
         });
         weatherTime.setHours(weatherTime.getHours() + 1);
@@ -165,8 +174,16 @@
                 }
             },
             eventClick: function(info) {
-                if (info.event.extendedProps.icon) {
-                    alert(`Temperature: ${info.event.extendedProps.temp} °C`);
+                var extendedProps = info.event.extendedProps;
+                if (extendedProps.icon) {
+                    alert(
+                        `Temperature: ${extendedProps.temp} °C\n`
+                        `Wind: ${extendedProps.windSpeed} km/h, ${extendedProps.windDegree}° (${extendedProps.windDir})\n`
+                        `Humidity: ${extendedProps.humidity}%\n`
+                        `Cloud: ${extendedProps.cloud}%\n`
+                        `Rain: ${extendedProps.precip} mm, ${extendedProps.chanceOfRain}% chance\n`
+                        `Snow: ${extendedProps.snow} cm, ${extendedProps.chanceOfSnow}% chance`
+                    );
                     return;
                 }
 

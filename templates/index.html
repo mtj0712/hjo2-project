@@ -30,7 +30,11 @@
     }
 
     function updateCalendar(calendar) {
-        calendar.getEvents().forEach((e) => e.remove());
+        calendar.getEvents().forEach((e) => {
+            if (e.id !== 'weather') {
+                e.remove();
+            }
+        });
 
         var start = calendar.view.currentStart.toISOString().slice(0, -14);
         var end = calendar.view.currentEnd.toISOString().slice(0, -14);

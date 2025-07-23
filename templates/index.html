@@ -164,6 +164,7 @@
             },
             slotLaneDidMount: function(info) {
                 var time = info.date.getTime();
+                var now = new Date();
                 var first = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7).getTime();
                 var last = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 4).getTime();
 

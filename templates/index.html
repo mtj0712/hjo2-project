@@ -129,11 +129,11 @@
                 if (info.event.extendedProps.icon) {
                     const imgEl = document.createElement('img');
                     imgEl.src = info.event.extendedProps.icon;
-                    imgEl.style.width = '16px';
-                    imgEl.style.height = '16px';
+                    imgEl.style.width = '2em';
+                    imgEl.style.height = '2em';
                     imgEl.style.position = 'absolute';
-                    imgEl.style.top = '2px';
-                    imgEl.style.left = '2px';
+                    imgEl.style.top = '0.5em';
+                    imgEl.style.left = '0.5em';
                     imgEl.style.pointerEvents = 'none';
 
                     info.el.appendChild(imgEl);
@@ -202,20 +202,6 @@
                     info.el.style.backgroundRepeat = 'no-repeat';
                     info.el.style.backgroundImage = bgImageMap[dateStr];
                     info.el.classList.add('bg-date');
-                }
-            },
-            slotLaneDidMount: function(info) {
-                var time = info.date.getTime();
-                var now = new Date();
-                var first = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7).getTime();
-                var last = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 4).getTime();
-
-                if (first <= time && time < last) {
-                    console.log('Within range!');
-                    var i = Math.trunc((time - first) / 3600000);
-                    info.el.style.backgroundImage = `url("http:${hourly_icons[i]}")`;
-                    info.el.style.backgroundSize = 'contain';
-                    info.el.style.backgroundRepeat = 'no-repeat';
                 }
             },
             datesSet: function(dateInfo) {

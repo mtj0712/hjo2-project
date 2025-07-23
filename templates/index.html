@@ -145,12 +145,14 @@
             viewDidMount: function(viewInfo) {
                 console.log('viewDidMount');
                 if (viewInfo.view.type !== 'dayGridMonth') {
+                    console.log('timeGridWeek');
                     calendar.addEventSource(iconEvents);
                 }
             },
             viewWillUnmount: function(viewInfo) {
                 console.log('viewWillUnmount');
                 if (viewInfo.view.type !== 'dayGridMonth') {
+                    console.log('timeGridWeek');
                     iconEvents.forEach(event => {
                         const e = calendar.getEventById(event.id);
                         if (e) e.remove();

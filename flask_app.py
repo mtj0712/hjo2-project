@@ -69,7 +69,7 @@ def index():
     past_week_icons = []
     next_three_days_icons = []
 
-    hourly_icons = []
+    hourly_weather = []
 
     for i in range(1, 8):
         history_params['dt'] = str(today - timedelta(days=i))
@@ -78,7 +78,7 @@ def index():
         forecastday = history_data['forecast']['forecastday'][0]
         past_week_icons.append(forecastday['day']['condition']['icon'])
         for h in forecastday['hour']:
-            hourly_icons.append(h['condition']['icon'])
+            hourly_weather.append(h)
 
     hour = datetime.now().hour
 
@@ -87,14 +87,14 @@ def index():
     history_data = history_response.json()
     hours = history_data['forecast']['forecastday'][0]['hour']
     for i in range(hour+1):
-        hourly_icons.append(hours[i]['condition']['icon'])
+        hourly_weather.append(hours[i])
 
     forecast_params['dt'] = str(today)
     forecast_response = requests.get(url=forecast_url, params=forecast_params)
     forecast_data = forecast_response.json()
     hours = forecast_data['forecast']['forecastday'][0]['hour']
     for i in range(hour+1, 24):
-        hourly_icons.append(hours[i]['condition']['icon'])
+        hourly_weather.append(hours[i])
 
     for i in range(1, 4):
         forecast_params['dt'] = str(today + timedelta(days=i))
@@ -103,7 +103,7 @@ def index():
         forecastday = forecast_data['forecast']['forecastday'][0]
         next_three_days_icons.append(forecastday['day']['condition']['icon'])
         for h in forecastday['hour']:
-            hourly_icons.append(h['condition']['icon'])
+            hourly_weather.append(h)
     
     # TODO: provide hour-by-hour weather (forecastday -> hour element)
 
@@ -112,7 +112,7 @@ def index():
                             current_icon=current_icon,
                             past_week_icons=past_week_icons,
                             next_three_days_icons=next_three_days_icons,
-                            hourly_icons=hourly_icons,
+                            hourly_weather=hourly_weather,
                             alert_message=alert_message)
 
 @app.route('/getEvents', methods=['POST'])

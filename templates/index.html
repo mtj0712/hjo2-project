@@ -18,6 +18,7 @@
     var bgImageMap = {};
 
     var today = new Date();
+    today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
     bgImageMap[today.toISOString().slice(0, 10)] = `url("https:${current_icon}")`;
     for (var i = 0; i < 7; i++) {
         today.setDate(today.getDate() - 1);
@@ -33,6 +34,7 @@
     var weatherEvents = [];
 
     var weatherTime = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+    weatherTime.setMinutes(weatherTime.getMinutes() - weatherTime.getTimezoneOffset());
     for (var i = 0; i < hourly_icons.length; i++) {
         weatherEvents.push({
             id: `weather-${i}`,

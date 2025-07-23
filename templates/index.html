@@ -141,22 +141,14 @@
 
                 return true;
             },
-            eventDidMount: function(info) {
-                const viewType = info.view.type;
-                if (info.event.extendedProps.icon) {
-                    if (viewType === 'dayGridMonth') {
-                        info.el.style.display = 'none';
-                    } else {
-                        info.el.style.display = 'block';
-                    }
-                }
-            },
             viewDidMount: function(viewInfo) {
+                console.log('viewDidMount');
                 if (viewInfo.view.type !== 'dayGridMonth') {
                     calendar.addEventSource(iconEvents);
                 }
             },
             viewWillUnmount: function(viewInfo) {
+                console.log('viewWillUnmount');
                 if (viewInfo.view.type !== 'dayGridMonth') {
                     iconEvents.forEach(event => {
                         const e = calendar.getEventById(event.id);

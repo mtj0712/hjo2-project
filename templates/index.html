@@ -159,6 +159,12 @@
                     }
                 }
             },
+            viewWillUnmount: function(viewInfo) {
+                document.querySelectorAll('.bg-date').forEach(cell => {
+                    cell.style.backgroundImage = '';
+                    cell.classList.remove('bg-date');
+                });
+            },
             eventClick: function(info) {
                 if (info.event.extendedProps.icon) {
                     return;

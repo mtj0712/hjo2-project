@@ -31,7 +31,7 @@
 
     function updateCalendar(calendar) {
         calendar.getEvents().forEach((e) => {
-            if (e.id !== 'weather') {
+            if (!e.id.startsWith('weather')) {
                 e.remove();
             }
         });
@@ -86,20 +86,6 @@
         });
     }
 
-    var iconEvents = [
-        {
-            id: 'weather-0',
-            start: '2025-07-25T10:00:00',
-            allDay: false,
-            overlap: false,
-            editable: false,
-            display: 'block',
-            icon: 'http:' + hourly_icons[0]
-        }
-    ];
-
-    var currentIconEvents = [];
-
     document.addEventListener('DOMContentLoaded', function() {
         if (alert_message.length != 0) {
             alert(alert_message);
@@ -127,6 +113,17 @@
             allDaySlot: false,
             nowIndicator: true,
             slotDuration: '01:00:00',
+            events: [
+                {
+                    id: 'weather-0',
+                    start: '2025-07-25T10:00:00',
+                    allDay: false,
+                    overlap: false,
+                    editable: false,
+                    display: 'block',
+                    icon: 'http:' + hourly_icons[0]
+                }
+            ],
             eventDidMount: function(info) {
                 console.log('eventDidMount');
                 if (arg.event.extendedProps.icon) {
@@ -143,26 +140,18 @@
                 }
             },
             viewDidMount: function(viewInfo) {
-                if (viewInfo.view.type !== 'dayGridMonth') {
-                    console.log('timeGridWeek - viewDidMount');
-                    currentIconEvents = iconEvents.map(e => {
-                        var event_obj = calendar.addEventSource([e]);
-                        console.log('Weather Event Added');
-                        return event_obj;
-                    });
-                    console.log(currentIconEvents);
-                    calendar.changeView('timeGridDay');
-                    calendar.changeView('timeGridWeek');
-                }
-            },
-            viewWillUnmount: function(viewInfo) {
-                if (viewInfo.view.type !== 'dayGridMonth') {
-                    console.log('timeGridWeek - viewWillUnmount');
-                    currentIconEvents.forEach(e => {
-                        e.remove();
-                        console.log('Weather Event Removed');
-                    });
-                    currentIconEvents = [];
+                if (viewInfo.view.type === 'dayGridMonth') {
+                    for (let e in calendar.getEvents()){
+                        if (e.id.startsWith('weather')) {
+                            e.display = 'none';
+                        }
+                    }
+                } else {
+                    for (let e in calendar.getEvents()){
+                        if (e.id.startsWith('weather')) {
+                            e.display = 'block';
+                        }
+                    }
                 }
             },
             eventClick: function(info) {

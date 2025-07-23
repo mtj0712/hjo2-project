@@ -140,18 +140,11 @@
                 }
             },
             viewDidMount: function(viewInfo) {
+                var e = calendar.getEventById('weather-0');
                 if (viewInfo.view.type === 'dayGridMonth') {
-                    for (let e in calendar.getEvents()) {
-                        if (e.id.startsWith('weather')) {
-                            e.display = 'none';
-                        }
-                    }
+                    e.display = 'none';
                 } else {
-                    for (let e in calendar.getEvents()) {
-                        if (e.id.startsWith('weather')) {
-                            e.display = 'block';
-                        }
-                    }
+                    e.display = 'block';
                 }
             },
             eventClick: function(info) {

@@ -118,7 +118,6 @@
                     id: 'weather-0',
                     start: '2025-07-25T10:00:00',
                     allDay: false,
-                    displayEventTime: false,
                     overlap: false,
                     editable: false,
                     display: 'block',
@@ -144,7 +143,7 @@
                 if (viewInfo.view.type === 'dayGridMonth') {
                     e.setProp('display', 'none');
                 } else {
-                    e.setProp('display', 'block');
+                    e.setProp('display', 'background');
                 }
             },
             eventClick: function(info) {

@@ -118,6 +118,7 @@
                     id: 'weather-0',
                     start: '2025-07-25T10:00:00',
                     allDay: false,
+                    displayEventTime: false,
                     overlap: false,
                     editable: false,
                     display: 'block',
@@ -125,7 +126,6 @@
                 }
             ],
             eventDidMount: function(info) {
-                console.log('eventDidMount');
                 if (info.event.extendedProps.icon) {
                     const imgEl = document.createElement('img');
                     imgEl.src = info.event.extendedProps.icon;

@@ -40,6 +40,8 @@ forecast_params = {
     'q': 'Seoul'
 }
 
+# TODO: create account setting page - allow to delete account, change location
+
 @app.route('/')
 def index():
     if 'loggedin' not in session:
@@ -64,26 +66,53 @@ def index():
     realtime_data = realtime_response.json()
     current_icon = realtime_data['current']['condition']['icon']
 
-    past_week_icon = []
-    next_three_days_icon = []
+    past_week_icons = []
+    next_three_days_icons = []
+
+    hourly_icons = []
 
     for i in range(1, 8):
         history_params['dt'] = str(today - timedelta(days=i))
         history_response = requests.get(url=history_url, params=history_params)
         history_data = history_response.json()
-        past_week_icon.append(history_data['forecast']['forecastday'][0]['day']['condition']['icon'])
+        forecastday = history_data['forecast']['forecastday'][0]
+        past_week_icons.append(forecastday['day']['condition']['icon'])
+        for h in forecastday['hour']:
+            hourly_icons.append(h['condition']['icon'])
+
+    hour = datetime.now().hour
+
+    history_params['dt'] = str(today)
+    history_response = requests.get(url=history_url, params=history_params)
+    history_data = history_response.json()
+    hours = history_data['forecast']['forecastday'][0]['hour']
+    for i in range(hour+1):
+        hourly_icons.append(hours[i]['condition']['icon'])
+
+    forecast_params['dt'] = str(today)
+    forecast_response = requests.get(url=forecast_url, params=forecast_params)
+    forecast_data = forecast_response.json()
+    hours = forecast_data['forecast']['forecastday'][0]['hour']
+    for i in range(hour+1, 24):
+        hourly_icons.append(hours[i]['condition']['icon'])
 
     for i in range(1, 4):
         forecast_params['dt'] = str(today + timedelta(days=i))
         forecast_response = requests.get(url=forecast_url, params=forecast_params)
         forecast_data = forecast_response.json()
-        next_three_days_icon.append(forecast_data['forecast']['forecastday'][0]['day']['condition']['icon'])
+        forecastday = forecast_data['forecast']['forecastday'][0]
+        next_three_days_icons.append(forecastday['day']['condition']['icon'])
+        for h in forecastday['hour']:
+            hourly_icons.append(h['condition']['icon'])
+    
+    # TODO: provide hour-by-hour weather (forecastday -> hour element)
 
     return render_template('index.html',
                             username=session['username'],
                             current_icon=current_icon,
-                            past_week_icon=past_week_icon,
-                            next_three_days_icon=next_three_days_icon,
+                            past_week_icons=past_week_icons,
+                            next_three_days_icons=next_three_days_icons,
+                            hourly_icons=hourly_icons,
                             alert_message=alert_message)
 
 @app.route('/getEvents', methods=['POST'])

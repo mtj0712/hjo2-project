@@ -147,7 +147,7 @@
                 }
             },
             viewDidMount: function(viewInfo) {
-                for (let we in weatherEvents) {
+                for (let we of weatherEvents) {
                     var e = calendar.getEventById(we.id);
                     console.log(we.id);
                     console.log(e);

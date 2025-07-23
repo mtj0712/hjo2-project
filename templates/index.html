@@ -109,6 +109,28 @@
             allDaySlot: false,
             nowIndicator: true,
             slotDuration: '01:00:00',
+            events: [
+                {
+                    id: 'weather',
+                    title: '',
+                    start: '2025-07-25T10:00:00',
+                    display: 'block'
+                }
+            ],
+            eventContent: function(arg) {
+                if (arg.event.id === 'weather') {
+                    const imgEl = document.createElement('img');
+                    imgEl.src = hourly_icons[0];
+                    imgEl.style.width = '20px';
+                    imgEl.style.height = '20px';
+                    imgEl.style.display = 'block';
+                    imgEl.style.margin = 'auto';
+
+                    return { domNodes: [imgEl] };
+                }
+
+                return true;
+            },
             eventClick: function(info) {
                 alert(info.event.title);
 

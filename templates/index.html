@@ -142,8 +142,12 @@
             },
             eventDidMount: function(info) {
                 const viewType = info.view.type;
-                if (info.event.extendedProps.icon && viewType === 'dayGridMonth') {
-                    info.el.style.display = 'none';
+                if (info.event.extendedProps.icon) {
+                    if (viewType === 'dayGridMonth') {
+                        info.el.style.display = 'none';
+                    } else {
+                        info.el.style.display = 'block';
+                    }
                 }
             },
             eventClick: function(info) {

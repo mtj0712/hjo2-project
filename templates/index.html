@@ -126,7 +126,7 @@
             ],
             eventDidMount: function(info) {
                 console.log('eventDidMount');
-                if (arg.event.extendedProps.icon) {
+                if (info.event.extendedProps.icon) {
                     const imgEl = document.createElement('img');
                     imgEl.src = arg.event.extendedProps.icon;
                     imgEl.style.width = '16px';

@@ -86,6 +86,18 @@
         });
     }
 
+    var iconEvents = [
+        {
+            id: 'weather-0',
+            start: '2025-07-25T10:00:00',
+            allDay: false,
+            overlap: false,
+            editable: false,
+            display: 'block',
+            icon: 'http:' + hourly_icons[0]
+        }
+    ];
+
     document.addEventListener('DOMContentLoaded', function() {
         if (alert_message.length != 0) {
             alert(alert_message);
@@ -112,18 +124,7 @@
             },
             allDaySlot: false,
             nowIndicator: true,
-            slotDuration: '01:00:00',
-            events: [
-                {
-                    id: 'weather-0',
-                    start: '2025-07-25T10:00:00',
-                    allDay: false,
-                    overlap: false,
-                    editable: false,
-                    display: 'block',
-                    icon: 'http:' + hourly_icons[0]
-                }
-            ],
+            slotDuration: '01:00:00',,
             eventContent: function(arg) {
                 if (arg.event.extendedProps.icon && arg.view.type !== 'dayGridMonth') {
                     const imgEl = document.createElement('img');
@@ -148,6 +149,19 @@
                     } else {
                         info.el.style.display = 'block';
                     }
+                }
+            },
+            viewDidMount: function(viewInfo) {
+                if (viewInfo.view.type !== 'dayGridMonth') {
+                    calendar.addEventSource(iconEvents);
+                }
+            },
+            viewWillUnmount: function(viewInfo) {
+                if (viewInfo.view.type !== 'dayGridMonth') {
+                    iconEvents.forEach(event => {
+                        const e = calendar.getEventById(event.id);
+                        if (e) e.remove();
+                    });
                 }
             },
             eventClick: function(info) {

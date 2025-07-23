@@ -18,15 +18,15 @@
     var bgImageMap = {};
 
     var today = new Date();
-    bgImageMap[today.toISOString().slice(0, 10)] = `url("http:${current_icon}")`;
+    bgImageMap[today.toISOString().slice(0, 10)] = `url("https:${current_icon}")`;
     for (var i = 0; i < 7; i++) {
         today.setDate(today.getDate() - 1);
-        bgImageMap[today.toISOString().slice(0, 10)] = `url("http:${past_week_icons[i]}")`;
+        bgImageMap[today.toISOString().slice(0, 10)] = `url("https:${past_week_icons[i]}")`;
     }
     today.setDate(today.getDate() + 7);
     for (var i = 0; i < 3; i++) {
         today.setDate(today.getDate() + 1);
-        bgImageMap[today.toISOString().slice(0, 10)] = `url("http:${next_three_days_icons[i]}")`;
+        bgImageMap[today.toISOString().slice(0, 10)] = `url("https:${next_three_days_icons[i]}")`;
     }
     today.setDate(today.getDate() - 3);
 
@@ -41,7 +41,7 @@
             overlap: false,
             editable: false,
             display: 'background',
-            icon: 'http:' + hourly_icons[i],
+            icon: 'https:' + hourly_icons[i],
             backgroundColor: 'white'
         });
         weatherTime.setHours(weatherTime.getHours() + 1);

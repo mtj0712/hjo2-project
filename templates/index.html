@@ -17,7 +17,7 @@
 
     var bgImageMap = {};
 
-    const today = new Date();
+    var today = new Date();
     bgImageMap[today.toISOString().slice(0, 10)] = `url("http:${current_icon}")`;
     for (var i = 0; i < 7; i++) {
         today.setDate(today.getDate() - 1);
@@ -27,6 +27,24 @@
     for (var i = 0; i < 3; i++) {
         today.setDate(today.getDate() + 1);
         bgImageMap[today.toISOString().slice(0, 10)] = `url("http:${next_three_days_icons[i]}")`;
+    }
+    today.setDate(today.getDate() - 3);
+
+    var weatherEvents = [];
+
+    var weatherTime = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+    for (var i = 0; i < hourly_icons.length; i++) {
+        weatherEvents.push({
+            id: `weather-${i}`,
+            start: weatherTime.toISOString().slice(0, -5),
+            allDay: false,
+            overlap: false,
+            editable: false,
+            display: 'background',
+            icon: 'http:' + hourly_icons[i],
+            backgroundColor: 'white'
+        });
+        weatherTime.setHours(weatherTime.getHours() + 1);
     }
 
     function updateCalendar(calendar) {
@@ -113,18 +131,7 @@
             allDaySlot: false,
             nowIndicator: true,
             slotDuration: '01:00:00',
-            events: [
-                {
-                    id: 'weather-0',
-                    start: '2025-07-25T10:00:00',
-                    allDay: false,
-                    overlap: false,
-                    editable: false,
-                    display: 'block',
-                    icon: 'http:' + hourly_icons[0],
-                    backgroundColor: 'white'
-                }
-            ],
+            events: weatherEvents,
             eventDidMount: function(info) {
                 if (info.event.extendedProps.icon) {
                     const imgEl = document.createElement('img');
@@ -140,11 +147,14 @@
                 }
             },
             viewDidMount: function(viewInfo) {
-                var e = calendar.getEventById('weather-0');
-                if (viewInfo.view.type === 'dayGridMonth') {
-                    e.setProp('display', 'none');
-                } else {
-                    e.setProp('display', 'background');
+                for (let we in weatherEvents) {
+                    var e = calendar.getEventById(we.id);
+
+                    if (viewInfo.view.type === 'dayGridMonth') {
+                        e.setProp('display', 'none');
+                    } else {
+                        e.setProp('display', 'background');
+                    }
                 }
             },
             eventClick: function(info) {
@@ -204,15 +214,6 @@
                     if (!info.el.classList.contains('bg-date')) {
                         info.el.classList.add('bg-date');
                     }
-                }
-            },
-            dayCellWillUnmount: function(info) {
-                const dateStr = info.date.getFullYear() + '-'
-                    + String(info.date.getMonth() + 1).padStart(2, '0') + '-'
-                    + String(info.date.getDate()).padStart(2, '0');
-
-                if (bgImageMap[dateStr]) {
-                    info.el.style.backgroundImage = '';
                 }
             },
             datesSet: function(dateInfo) {

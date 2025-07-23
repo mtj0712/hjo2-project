@@ -142,7 +142,7 @@
             },
             eventDidMount: function(info) {
                 const viewType = info.view.type;
-                if (info.event.id == 'weather' && viewType === 'dayGridMonth') {
+                if (info.event.extendedProps.icon && viewType === 'dayGridMonth') {
                     info.el.style.display = 'none';
                 }
             },

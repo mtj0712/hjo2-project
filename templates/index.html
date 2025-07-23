@@ -114,6 +114,7 @@
             themeSystem: 'bootstrap5',
             initialView: 'dayGridMonth',
             bootstrapFontAwesome: false,
+            timezone: 'Asia/Seoul',
             customButtons: {
                 addEvent: {
                     text: 'add event',
@@ -159,7 +160,6 @@
 
                 if (viewInfo.view.type !== 'dayGridMonth') {
                     document.querySelectorAll('.bg-date').forEach(cell => {
-                        console.log('bg-date');
                         cell.style.backgroundImage = '';
                         cell.classList.remove('bg-date');
                     });

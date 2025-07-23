@@ -201,7 +201,18 @@
                     info.el.style.backgroundSize = 'contain';
                     info.el.style.backgroundRepeat = 'no-repeat';
                     info.el.style.backgroundImage = bgImageMap[dateStr];
-                    info.el.classList.add('bg-date');
+                    if (!info.el.classList.contains('bg-date')) {
+                        info.el.classList.add('bg-date');
+                    }
+                }
+            },
+            dayCellWillUnmount: function(info) {
+                const dateStr = info.date.getFullYear() + '-'
+                    + String(info.date.getMonth() + 1).padStart(2, '0') + '-'
+                    + String(info.date.getDate()).padStart(2, '0');
+
+                if (bgImageMap[dateStr]) {
+                    info.el.style.backgroundImage = '';
                 }
             },
             datesSet: function(dateInfo) {

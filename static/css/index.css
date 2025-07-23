@@ -2,10 +2,6 @@
     box-sizing: border-box;
 }
 
-.fc-bg-event {
-    background-color: white;
-}
-
 .form-popup {
     display: none;
     max-width: 500px;

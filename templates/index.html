@@ -150,7 +150,8 @@
                         console.log('Weather Event Added');
                         return event_obj;
                     });
-                    calendar.render();
+                    calendar.changeView('timeGridDay');
+                    calendar.changeView('timeGridWeek');
                 }
             },
             viewWillUnmount: function(viewInfo) {

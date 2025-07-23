@@ -128,7 +128,7 @@
                 console.log('eventDidMount');
                 if (info.event.extendedProps.icon) {
                     const imgEl = document.createElement('img');
-                    imgEl.src = arg.event.extendedProps.icon;
+                    imgEl.src = info.event.extendedProps.icon;
                     imgEl.style.width = '16px';
                     imgEl.style.height = '16px';
                     imgEl.style.position = 'absolute';
@@ -141,13 +141,13 @@
             },
             viewDidMount: function(viewInfo) {
                 if (viewInfo.view.type === 'dayGridMonth') {
-                    for (let e in calendar.getEvents()){
+                    for (let e in calendar.getEvents()) {
                         if (e.id.startsWith('weather')) {
                             e.display = 'none';
                         }
                     }
                 } else {
-                    for (let e in calendar.getEvents()){
+                    for (let e in calendar.getEvents()) {
                         if (e.id.startsWith('weather')) {
                             e.display = 'block';
                         }

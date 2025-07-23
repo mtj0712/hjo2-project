@@ -146,7 +146,11 @@
                 console.log('viewDidMount');
                 if (viewInfo.view.type !== 'dayGridMonth') {
                     console.log('timeGridWeek');
-                    currentIconEvents = iconEvents.map(e => calendar.addEvent(e));
+                    currentIconEvents = iconEvents.map(e => {
+                        var event_obj = calendar.addEvent(e);
+                        console.log('Weather Event Added');
+                        return event_obj;
+                    });
                 }
             },
             viewWillUnmount: function(viewInfo) {
@@ -215,7 +219,6 @@
                 }
             },
             slotLaneDidMount: function(info) {
-                console.log(info.date);
                 var time = info.date.getTime();
                 var now = new Date();
                 var first = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7).getTime();

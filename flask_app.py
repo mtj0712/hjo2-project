@@ -38,8 +38,6 @@ forecast_params = {
     'q': 'Seoul'
 }
 
-# TODO: create account setting page - allow to delete account, change location
-
 @app.route('/')
 def index():
     if 'loggedin' not in session:
@@ -253,7 +251,13 @@ def setting():
 
     cursor.close()
 
-    return render_template('setting.html', email=email)
+    if not email:
+        return redirect(url_for('login'))
+
+    email = email['email']
+    username = session['username']
+
+    return render_template('setting.html', email=email, username=username)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

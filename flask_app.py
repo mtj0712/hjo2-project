@@ -252,7 +252,7 @@ def setting():
     cursor.close()
 
     if not email:
-        return redirect(url_for('login'))
+        return redirect(url_for('logout'))
 
     email = email['email']
     username = session['username']
@@ -262,7 +262,15 @@ def setting():
 @app.route('/deleteAccount')
 def deleteAccount():
     # TODO: delete account
-    return redirect(url_for('login'))
+    if 'loggedin' not in session:
+        return redirect(url_for('login'))
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('DELETE FROM accounts WHERE id = %s', (session['id'],))
+    mysql.connection.commit()
+    cursor.close()
+
+    return redirect(url_for('logout'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -294,11 +302,14 @@ def login():
 
 @app.route('/logout')
 def logout():
-   session.pop('loggedin', None)
-   session.pop('id', None)
-   session.pop('username', None)
+    if 'loggedin' in session:
+        session.pop('loggedin', None)
+    if 'id' in session:
+        session.pop('id', None)
+    if 'username' in session:
+        session.pop('username', None)
 
-   return redirect(url_for('login'))
+    return redirect(url_for('login'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

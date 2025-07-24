@@ -12,9 +12,21 @@
 {% endblock %}
 
 {% block body %}
-<p><a href="{{ url_for('index') }}">Return</a></p>
-<p>Username: {{ username }}</p>
-<p>Email: {{ email }}</p>
-<p>Location: {{ location }}</p>
-<button onclick="deleteAccount()">Delete Account</button>
+<div class="container">
+    <div class="row">
+        <p class="col-2 order-2"><a href="{{ url_for('index') }}">Return</a></p>
+        <p class="col-10 order-1">Username: {{ username }}</p>
+    </div>
+    <div class="row">
+        <p>Email: {{ email }}</p>
+    </div>
+    <div class="row">
+        <p>Location: {{ location }}</p>
+    </div>
+    <!-- TODO: LOCATION SEARCH -->
+    <!-- name, region, country -->
+     <div class="row">
+        <button type="button" class="btn btn-warning" onclick="deleteAccount()">Delete Account</button>
+     </div>
+</div>
 {% endblock %}

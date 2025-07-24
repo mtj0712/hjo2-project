@@ -48,3 +48,27 @@
 .form-container button[type=button] {
     background-color: red;
 }
+
+#welcome {
+    position: fixed;
+    top: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#calendar {
+    width: 80%;
+    height: 80%;
+    position: fixed;
+    top: 10%;
+    right: 10%;
+    margin: 0;
+    padding: 0;
+}
+
+#copyright {
+    position: fixed;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+}

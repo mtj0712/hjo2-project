@@ -255,7 +255,6 @@ def setting():
 
 @app.route('/deleteAccount')
 def deleteAccount():
-    # TODO: delete account
     if 'loggedin' not in session:
         return redirect(url_for('login'))
 

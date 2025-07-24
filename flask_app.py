@@ -259,6 +259,11 @@ def setting():
 
     return render_template('setting.html', email=email, username=username)
 
+@app.route('/deleteAccount')
+def deleteAccount():
+    # TODO: delete account
+    return redirect(url_for('login'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error_msg = ''

@@ -2,9 +2,17 @@
 
 {% block head %}
 <title>Setting</title>
+<script>
+    function deleteAccount() {
+        if (confirm('Are you sure you want to delete your account?')) {
+            location.replace('{{ url_for("deleteAccount") }}');
+        }
+    }
+</script>
 {% endblock %}
 
 {% block body %}
 <p>Username: {{ username }}</p>
 <p>Email: {{ email }}</p>
+<button onclick="deleteAccount()">Delete Account</button>
 {% endblock %}

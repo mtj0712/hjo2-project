@@ -21,21 +21,12 @@ mysql = MySQL(app)
 weatherapi_key = "721cd28a95b849ff90f32123232403"
 
 realtime_url = "https://api.weatherapi.com/v1/current.json"
-realtime_params = {
-    'key': weatherapi_key,
-    'q': 'Seoul'
-}
-
 history_url = "https://api.weatherapi.com/v1/history.json"
-history_params = {
-    'key': weatherapi_key,
-    'q': 'Seoul'
-}
-
 forecast_url = "https://api.weatherapi.com/v1/forecast.json"
-forecast_params = {
+
+params = {
     'key': weatherapi_key,
-    'q': 'Seoul'
+    'q': 'Seoul, South Korea'
 }
 
 @app.route('/')
@@ -58,7 +49,9 @@ def index():
 
     today = date.today()
 
-    realtime_response = requests.get(url=realtime_url, params=realtime_params)
+    params['q'] = session['location']
+
+    realtime_response = requests.get(url=realtime_url, params=params)
     realtime_data = realtime_response.json()
     current_icon = realtime_data['current']['condition']['icon']
 
@@ -68,31 +61,31 @@ def index():
     hourly_weather = []
 
     for i in range(1, 8):
-        history_params['dt'] = str(today - timedelta(days=i))
-        history_response = requests.get(url=history_url, params=history_params)
+        params['dt'] = str(today - timedelta(days=i))
+        history_response = requests.get(url=history_url, params=params)
         history_data = history_response.json()
         forecastday = history_data['forecast']['forecastday'][0]
         past_week_icons.append(forecastday['day']['condition']['icon'])
         for h in forecastday['hour']:
             hourly_weather.append(h)
 
-    history_params['dt'] = str(today)
-    history_response = requests.get(url=history_url, params=history_params)
+    params['dt'] = str(today)
+    history_response = requests.get(url=history_url, params=params)
     history_data = history_response.json()
 
     if len(history_data['forecast']['forecastday']) != 0:
         for h in history_data['forecast']['forecastday'][0]['hour']:
             hourly_weather.append(h)
     else:
-        forecast_params['dt'] = str(today)
-        forecast_response = requests.get(url=forecast_url, params=forecast_params)
+        params['dt'] = str(today)
+        forecast_response = requests.get(url=forecast_url, params=params)
         forecast_data = forecast_response.json()
         for h in forecast_data['forecast']['forecastday'][0]['hour']:
             hourly_weather.append(h)
 
     for i in range(1, 4):
-        forecast_params['dt'] = str(today + timedelta(days=i))
-        forecast_response = requests.get(url=forecast_url, params=forecast_params)
+        params['dt'] = str(today + timedelta(days=i))
+        forecast_response = requests.get(url=forecast_url, params=params)
         forecast_data = forecast_response.json()
         forecastday = forecast_data['forecast']['forecastday'][0]
         next_three_days_icons.append(forecastday['day']['condition']['icon'])
@@ -245,19 +238,20 @@ def setting():
         return redirect(url_for('login'))
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT email FROM accounts WHERE id = %s', (session['id'],))
+    cursor.execute('SELECT email, location FROM accounts WHERE id = %s', (session['id'],))
 
-    email = cursor.fetchone()
+    account = cursor.fetchone()
 
     cursor.close()
 
-    if not email:
+    if not account:
         return redirect(url_for('logout'))
 
-    email = email['email']
     username = session['username']
+    email = account['email']
+    location = account['location']
 
-    return render_template('setting.html', email=email, username=username)
+    return render_template('setting.html', email=email, location=location, username=username)
 
 @app.route('/deleteAccount')
 def deleteAccount():
@@ -294,6 +288,7 @@ def login():
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
+            session['location'] = account['location']
             return redirect(url_for('index'))
         else:
             error_msg = 'Incorrect username/password!'
@@ -308,6 +303,8 @@ def logout():
         session.pop('id', None)
     if 'username' in session:
         session.pop('username', None)
+    if 'location' in session:
+        session.pop('location', None)
 
     return redirect(url_for('login'))
 

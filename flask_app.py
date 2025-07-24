@@ -78,21 +78,19 @@ def index():
         for h in forecastday['hour']:
             hourly_weather.append(h)
 
-    hour = datetime.now().hour
-
     history_params['dt'] = str(today)
     history_response = requests.get(url=history_url, params=history_params)
     history_data = history_response.json()
-    hours = history_data['forecast']['forecastday'][0]['hour']
-    for i in range(hour+1):
-        hourly_weather.append(hours[i])
 
-    forecast_params['dt'] = str(today)
-    forecast_response = requests.get(url=forecast_url, params=forecast_params)
-    forecast_data = forecast_response.json()
-    hours = forecast_data['forecast']['forecastday'][0]['hour']
-    for i in range(hour+1, 24):
-        hourly_weather.append(hours[i])
+    if len(history_data['forecast']['forecastday']) != 0:
+        for h in history_data['forecast']['forecastday'][0]['hour']:
+            hourly_weather.append(h)
+    else:
+        forecast_params['dt'] = str(today)
+        forecast_response = requests.get(url=forecast_url, params=forecast_params)
+        forecast_data = forecast_response.json()
+        for h in forecast_data['forecast']['forecastday'][0]['hour']:
+            hourly_weather.append(h)
 
     for i in range(1, 4):
         forecast_params['dt'] = str(today + timedelta(days=i))

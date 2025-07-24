@@ -6,8 +6,6 @@ import json
 import MySQLdb.cursors
 import re
 import requests
-from sqlalchemy import create_engine
-import sys
 
 app = Flask(__name__, static_folder="static", static_url_path="/")
 
@@ -244,6 +242,20 @@ def removeEvent():
     cursor.close()
 
     return ''
+
+@app.route('/setting')
+def setting():
+    if 'loggedin' not in session:
+        return redirect(url_for('login'))
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT email FROM accounts WHERE id = %s', (session['id'],))
+
+    email = cursor.fetchone()
+
+    cursor.close()
+
+    return render_template('setting.html', email=email)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

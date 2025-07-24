@@ -268,7 +268,7 @@
 {% endblock %}
 
 {% block body %}
-<div id="welcome">Welcome {{ username }}! <a href="{{ url_for('logout') }}">Logout</a></div>
+<div id="welcome">Welcome {{ username }}! <a href="{{ url_for('logout') }}">Logout</a> <a href="{{ url_for('setting') }}">Setting</a></div>
 <div id="calendar"></div>
 <div class="form-popup" id="addEventForm">
     <form action="{{ url_for('addEvent') }}" method="post" class="form-container">

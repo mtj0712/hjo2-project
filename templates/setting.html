@@ -16,7 +16,41 @@
 
         locationForm.addEventListener('submit', function(event) {
             event.preventDefault();
-            locationSearchResult.textContent = locationInput.value.trim() || 'This box will update when you press the button.';
+            const searchText = locationInput.value.trim();
+
+            fetch(
+                '{{ url_for("searchLocations") }}',
+                {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        q: searchText
+                    })
+                }
+            )
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                return response.text();
+            })
+            .then((responseText) => {
+                if (responseText.startsWith('ERROR')) {
+                    throw new Error(responseText);
+                }
+
+                var responseObj;
+                try {
+                    responseObj = JSON.parse(responseText);
+                } catch (error) {
+                    throw new Error('Invalid response from the server');
+                }
+
+                // TODO: update the location list
+            })
+            .catch((error) => {
+                alert(error);
+            });
         });
     });
 </script>

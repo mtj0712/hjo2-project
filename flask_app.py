@@ -253,7 +253,31 @@ def setting():
 
     return render_template('setting.html', email=email, location=location, username=username)
 
-# TODO: return list of locations
+@app.route('/searchLocations', methods=['POST'])
+def searchLocations():
+    if 'loggedin' not in session:
+        return 'Not logged in'
+
+    if 'q' not in request.form:
+        return 'No query given'
+
+    q = request.form['q']
+
+    params['q'] = q
+
+    search_response = requests.get(url=search_url, params=params)
+    search_data = search_response.json()
+
+    return_objs = []
+    for location_obj in search_data:
+        new_obj = { 'id': location_obj['id'] }
+        name = location_obj['name']
+        region = location_obj['region']
+        country = location_obj['country']
+        new_obj['name'] = f'{name}, {region}, {country}' if region else f'{name}, {country}'
+        return_objs.append(new_obj)
+
+    return json.dumps(return_objs, separators=(',', ':'))
 
 @app.route('/deleteAccount')
 def deleteAccount():

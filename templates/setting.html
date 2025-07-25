@@ -18,6 +18,8 @@
             event.preventDefault();
             const searchText = locationInput.value.trim();
 
+            locationSearchResult.innerHTML = '';
+
             fetch(
                 '{{ url_for("searchLocations") }}',
                 {
@@ -46,10 +48,15 @@
                     throw new Error('Invalid response from the server');
                 }
 
-                // TODO: update the location list
+                for (let locationObj of locationSearchResult) {
+                    const newParagraph = document.createElement('p');
+                    const textNode = document.createTextNode(locationObj.name);
+                    newParagraph.appendChild(textNode);
+                    locationSearchResult.appendChild(newParagraph);
+                }
             })
             .catch((error) => {
-                alert(error);
+                locationSearchResult.textContent = error.toString();
             });
         });
     });

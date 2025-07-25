@@ -49,7 +49,7 @@ def index():
 
     today = date.today()
 
-    params['q'] = session['location_id']
+    params['q'] = f'id:{session["location_id"]}'
 
     realtime_response = requests.get(url=realtime_url, params=params)
     realtime_data = realtime_response.json()
@@ -250,7 +250,7 @@ def setting():
     username = session['username']
     email = account['email']
 
-    params['q'] = account['location_id']
+    params['q'] = f'id:{account["location_id"]}'
 
     search_response = requests.get(url=search_url, params=params)
     search_data = search_response.json()

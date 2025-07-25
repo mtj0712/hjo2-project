@@ -385,7 +385,7 @@ def register():
             hash = password + app.secret_key
             hash = hashlib.sha1(hash.encode())
             password = hash.hexdigest()
-            cursor.execute('INSERT INTO accounts (username, password, email, location_id) VALUES (NULL, %s, %s, %s, %s)', (username, password, email, 1377353))
+            cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s, %s)', (username, password, email, 1377353))
             mysql.connection.commit()
             error_msg = 'You have successfully registered!'
 

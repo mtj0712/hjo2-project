@@ -48,7 +48,7 @@
                     throw new Error('Invalid response from the server');
                 }
 
-                for (let locationObj of locationSearchResult) {
+                for (let locationObj of responseObj) {
                     const newParagraph = document.createElement('p');
                     const textNode = document.createTextNode(locationObj.name);
                     newParagraph.appendChild(textNode);

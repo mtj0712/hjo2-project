@@ -9,22 +9,24 @@
         }
     }
 
-    const locationInput = document.getElementById('locationInput');
-    const locationSearchBtn = document.getElementById('locationSearchBtn');
-    const locationSearchResult = document.getElementById('locationSearchResult');
+    document.addEventListener('DOMContentLoaded', () => {
+        const locationInput = document.getElementById('locationInput');
+        const locationSearchBtn = document.getElementById('locationSearchBtn');
+        const locationSearchResult = document.getElementById('locationSearchResult');
 
-    function updateLocationSearchResult() {
-        const text = locationInput.value.trim();
-        locationSearchResult.textContent = text || 'This box will update when you press the button.';
-    }
-
-    locationSearchBtn.addEventListener('click', updateLocationSearchResult);
-
-    locationInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            updateBox();
+        function updateLocationSearchResult() {
+            const text = locationInput.value.trim();
+            locationSearchResult.textContent = text || 'This box will update when you press the button.';
         }
+
+        locationSearchBtn.addEventListener('click', updateLocationSearchResult);
+
+        locationInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                updateBox();
+            }
+        });
     });
 </script>
 {% endblock %}

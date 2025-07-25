@@ -51,13 +51,11 @@
                 for (let locationObj of responseObj) {
                     const newParagraph = document.createElement('p');
                     const textNode = document.createTextNode(locationObj.name);
-                    const btnNode = document.createElement('button');
-                    btnNode.classList.add('btn');
-                    btnNode.classList.add('btn-secondary');
-                    btnNode.type = 'button';
-                    btnNode.textContent = 'Switch to this location';
+                    const aNode = document.createElement('a');
+                    aNode.href = '{{ url_for("changeLocation") }}?location_id=' + locationObj.id;
+                    aNode.textContent = 'Switch to this location';
                     newParagraph.appendChild(textNode);
-                    newParagraph.appendChild(btnNode);
+                    newParagraph.appendChild(aNode);
                     locationSearchResult.appendChild(newParagraph);
                 }
             })

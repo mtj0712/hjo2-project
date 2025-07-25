@@ -49,7 +49,7 @@ def index():
 
     today = date.today()
 
-    params['q'] = session['location']
+    params['q'] = session['location_id']
 
     realtime_response = requests.get(url=realtime_url, params=params)
     realtime_data = realtime_response.json()
@@ -238,7 +238,7 @@ def setting():
         return redirect(url_for('login'))
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT email, location FROM accounts WHERE id = %s', (session['id'],))
+    cursor.execute('SELECT email, location_id FROM accounts WHERE id = %s', (session['id'],))
 
     account = cursor.fetchone()
 
@@ -249,7 +249,17 @@ def setting():
 
     username = session['username']
     email = account['email']
-    location = account['location']
+
+    params['q'] = account['location_id']
+
+    search_response = requests.get(url=search_url, params=params)
+    search_data = search_response.json()
+
+    name = search_data[0]['name']
+    region = search_data[0]['region']
+    country = search_data[0]['country']
+
+    location = f'{name}, {region}, {country}' if region else f'{name}, {country}'
 
     return render_template('setting.html', email=email, location=location, username=username)
 
@@ -278,6 +288,23 @@ def searchLocations():
         return_objs.append(new_obj)
 
     return json.dumps(return_objs, separators=(',', ':'))
+
+@app.route('/changeLocation')
+def changeLocation():
+    if 'loggedin' not in session:
+        return 'Not logged in'
+
+    if 'location_id' not in request.args:
+        return 'No location ID given'
+
+    location_id = request.args.get('location_id')
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('UPDATE accounts SET location_id = %s WHERE id = %s', (location_id, session['id']))
+    mysql.connection.commit()
+    cursor.close()
+
+    return redirect(url_for('setting'))
 
 @app.route('/deleteAccount')
 def deleteAccount():
@@ -313,7 +340,7 @@ def login():
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
-            session['location'] = account['location']
+            session['location_id'] = account['location_id']
             return redirect(url_for('index'))
         else:
             error_msg = 'Incorrect username/password!'

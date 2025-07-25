@@ -8,6 +8,24 @@
             location.replace('{{ url_for("deleteAccount") }}');
         }
     }
+
+    const locationInput = document.getElementById('locationInput');
+    const locationSearchBtn = document.getElementById('locationSearchBtn');
+    const locationSearchResult = document.getElementById('locationSearchResult');
+
+    function updateLocationSearchResult() {
+        const text = locationInput.value.trim();
+        locationSearchResult.textContent = text || 'This box will update when you press the button.';
+    }
+
+    locationSearchBtn.addEventListener('click', updateLocationSearchResult);
+
+    locationInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            updateBox();
+        }
+    });
 </script>
 {% endblock %}
 
@@ -25,10 +43,13 @@
     </div>
     <!-- TODO: LOCATION SEARCH -->
     <!-- name, region, country -->
-    <form action="" class="d-flex">
-        <input class="form-control me 2" type="search" placeholder="Enter location name here">
-        <button class="btn btn-outline-info" type="send">Search</button>
-    </form>
+    <div class="row">
+        <input class="form-control me 2" id="locationInput" type="search" placeholder="Enter location name here">
+        <button class="btn btn-outline-info" id="locationSearchBtn" type="send">Search</button>
+    </div>
+    <div class="row">
+        <div class="col" id="locationSearchResult"></div>
+    </div>
     <div class="row">
         <button type="button" class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
     </div>

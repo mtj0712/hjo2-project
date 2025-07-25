@@ -23,10 +23,10 @@ weatherapi_key = "721cd28a95b849ff90f32123232403"
 realtime_url = "https://api.weatherapi.com/v1/current.json"
 history_url = "https://api.weatherapi.com/v1/history.json"
 forecast_url = "https://api.weatherapi.com/v1/forecast.json"
+search_url = "http://api.weatherapi.com/v1/search.json"
 
 params = {
-    'key': weatherapi_key,
-    'q': 'Seoul, South Korea'
+    'key': weatherapi_key
 }
 
 @app.route('/')
@@ -252,6 +252,8 @@ def setting():
     location = account['location']
 
     return render_template('setting.html', email=email, location=location, username=username)
+
+# TODO: return list of locations
 
 @app.route('/deleteAccount')
 def deleteAccount():

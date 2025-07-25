@@ -51,7 +51,13 @@
                 for (let locationObj of responseObj) {
                     const newParagraph = document.createElement('p');
                     const textNode = document.createTextNode(locationObj.name);
+                    const btnNode = document.createElement('button');
+                    btnNode.classList.add('btn');
+                    btnNode.classList.add('btn-secondary');
+                    btnNode.type = 'button';
+                    btnNode.textContent = 'Switch to this location';
                     newParagraph.appendChild(textNode);
+                    newParagraph.appendChild(btnNode);
                     locationSearchResult.appendChild(newParagraph);
                 }
             })
@@ -91,7 +97,7 @@
         </div>
     </div>
     <div class="row">
-        <button type="button" class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+        <button class="btn btn-danger" type="button" onclick="deleteAccount()">Delete Account</button>
     </div>
 </div>
 {% endblock %}

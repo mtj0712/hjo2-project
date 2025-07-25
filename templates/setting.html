@@ -11,21 +11,12 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const locationInput = document.getElementById('locationInput');
-        const locationSearchBtn = document.getElementById('locationSearchBtn');
+        const locationForm = document.getElementById('locationForm');
         const locationSearchResult = document.getElementById('locationSearchResult');
 
-        function updateLocationSearchResult() {
-            const text = locationInput.value.trim();
-            locationSearchResult.textContent = text || 'This box will update when you press the button.';
-        }
-
-        locationSearchBtn.addEventListener('click', updateLocationSearchResult);
-
-        locationInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                updateBox();
-            }
+        locationForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            locationSearchResult.textContent = locationInput.value.trim() || 'This box will update when you press the button.';
         });
     });
 </script>
@@ -46,12 +37,14 @@
     <!-- TODO: LOCATION SEARCH -->
     <!-- name, region, country -->
     <div class="row">
-        <div class="col-11">
-            <input class="form-control me 2" id="locationInput" type="search" placeholder="Enter location name here">
-        </div>
-        <div class="col-1">
-            <button class="btn btn-outline-info" id="locationSearchBtn" type="send">Search</button>
-        </div>
+        <form id="locationForm">
+            <div class="col-11">
+                <input class="form-control me 2" id="locationInput" type="search" placeholder="Enter location name here">
+            </div>
+            <div class="col-1">
+                <button class="btn btn-primary" ]type="submit">Search</button>
+            </div>
+        </form>
     </div>
     <div class="row">
         <div class="col" id="locationSearchResult">

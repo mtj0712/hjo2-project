@@ -118,15 +118,15 @@
         const forecast = [];
         for (let i = 24*8; i < hourly_weather.length; i++) {
             forecast.push({
-                time: hourly_weather.time,
-                temp: hourly_weather.temp_c,
-                wind: hourly_weather.wind_kph,
-                humid: hourly_weather.humidity,
-                cloud: hourly_weather.cloud,
-                rain: hourly_weather.precip_mm,
-                rain_p: hourly_weather.chance_of_rain,
-                snow: hourly_weather.snow_cm,
-                snow_p: hourly_weather.chance_of_snow
+                time: hourly_weather[i].time,
+                temp: hourly_weather[i].temp_c,
+                wind: hourly_weather[i].wind_kph,
+                humid: hourly_weather[i].humidity,
+                cloud: hourly_weather[i].cloud,
+                rain: hourly_weather[i].precip_mm,
+                rain_p: hourly_weather[i].chance_of_rain,
+                snow: hourly_weather[i].snow_cm,
+                snow_p: hourly_weather[i].chance_of_snow
             });
         }
         JSON.stringify(forecast);

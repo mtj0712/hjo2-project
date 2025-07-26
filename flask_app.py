@@ -1,6 +1,9 @@
 from datetime import date, datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
+import google
+from google import genai
+from google.genai import types
 import hashlib
 import json
 import MySQLdb.cursors
@@ -9,6 +12,7 @@ import requests
 
 app = Flask(__name__, static_folder="static", static_url_path="/")
 
+# MysQL
 app.secret_key = 'edHHfH3w4L'
 
 app.config['MYSQL_HOST'] = 'hjo2.mysql.pythonanywhere-services.com'
@@ -18,6 +22,7 @@ app.config['MYSQL_DB'] = 'hjo2$account'
 
 mysql = MySQL(app)
 
+# WeatherAPI
 weatherapi_key = "721cd28a95b849ff90f32123232403"
 
 realtime_url = "https://api.weatherapi.com/v1/current.json"
@@ -28,6 +33,13 @@ search_url = "http://api.weatherapi.com/v1/search.json"
 params = {
     'key': weatherapi_key
 }
+
+# Gemini
+client = genai.Client()
+model = "gemini-2.5-flash"
+config = types.GenerateContentConfig(
+    thinking_config=types.ThinkingConfig(thinking_budget=0)
+)
 
 @app.route('/')
 def index():
@@ -146,6 +158,51 @@ def getEvents():
             e['description'] = ''
     
     return json.dumps(events, separators=(',', ':'))
+
+# TODO: date recommendation
+@app.route('/recommendDate', methods=['POST'])
+def recommendDate():
+    if 'loggedin' not in session:
+        return 'not logged in'
+
+    if 'forecast' not in request.form:
+        return 'forecast not provided'
+
+    forecast = json.loads(request.form['forecast'])
+
+    event = request.form['event']
+
+    prompt = (
+        "Out of the following times, please recommend the best time to hold the following event.\n"
+        f"Event: {event}\n"
+    )
+    for weather in forecast:
+        prompt += (
+            f"\nTime: {weather['time']}\n"
+            f"Temperature (Celsius): {weather['temp']}\n"
+            f"Wind (kph): {weather['wind']}\n"
+            f"Humidity (%): {weather['humid']}\n"
+            f"Cloud (%): {weather['cloud']}\n"
+            f"Amount of rain (mm): {weather['rain']}\n"
+            f"Probability that it will rain (%): {weather['rain_p']}\n"
+            f"Amount of snow (cm): {weather['snow']}\n"
+            f"Probability that it will snow (%): {weather['snow_p']}\n"
+        )
+
+    try:
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt,
+            config=config
+        )
+
+        return response.text
+    except google.api_core.exceptions.ResourceExhausted as e:
+        return str(e)
+    except google.api_core.exceptions.GoogleAPIError as e:
+        return str(e)
+    except Exception as e:
+        return str(e)
 
 @app.route('/addEvent', methods=['POST'])
 def addEvent():

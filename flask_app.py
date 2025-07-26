@@ -38,7 +38,7 @@ params = {
 client = genai.Client(api_key="AIzaSyAZq1zZxpT7UKEfgGgrrziU0PmNbTMFzyA")
 model = "gemini-2.5-flash"
 config = types.GenerateContentConfig(
-    thinking_config=types.ThinkingConfig(thinking_budget=0)
+    thinking_config=types.ThinkingConfig(thinking_budget=512)
 )
 
 @app.route('/')

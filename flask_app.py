@@ -188,6 +188,7 @@ def recommendDate():
             f"Amount of snow (cm): {weather['snow']}\n"
             f"Probability that it will snow (%): {weather['snow_p']}\n"
         )
+    prompt += "Please state the time first and then briefly state your reasoning."
 
     try:
         response = client.models.generate_content(

@@ -23,7 +23,6 @@
         var day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i - 1);
         bgImageMap[`${day.getFullYear().toString().padStart(4, '0')}-${(day.getMonth()+1).toString().padStart(2, '0')}-${day.getDate().toString().padStart(2, '0')}`] = `url("https:${past_week_icons[i]}")`;
     }
-    // TODO: get more predictions
     for (var i = 0; i < 3; i++) {
         var day = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i + 1);
         bgImageMap[`${day.getFullYear().toString().padStart(4, '0')}-${(day.getMonth()+1).toString().padStart(2, '0')}-${day.getDate().toString().padStart(2, '0')}`] = `url("https:${next_three_days_icons[i]}")`;
@@ -41,7 +40,6 @@
             overlap: false,
             editable: false,
             display: 'background',
-            icon: 'https:' + hourly_weather[i].condition.icon,
             temp: hourly_weather[i].temp_c,
             windSpeed: hourly_weather[i].wind_kph,
             windDegree: hourly_weather[i].wind_degree,
@@ -54,6 +52,9 @@
             cloud: hourly_weather[i].cloud,
             backgroundColor: 'white'
         });
+        if (hourly_weather[i].condition.icon) {
+            weatherEvents[weatherEvents.length - 1].icon = 'https:' + hourly_weather[i].condition.icon
+        }
         weatherTime.setHours(weatherTime.getHours() + 1);
     }
 

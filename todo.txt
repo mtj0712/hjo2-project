@@ -1,6 +1,0 @@
-1. Add/remove/show events
-2. Retrieve new events when the month changed, enable weekly calendar
-3. Show hourly weather in weekly calendar
-4. Make account setting page - allow to delete account and change the location
-5. Use LLM to recommend the best day for a given activity
-6. Use AI to predict weather for the next week

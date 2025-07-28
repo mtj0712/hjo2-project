@@ -1,14 +1,14 @@
 from datetime import date, datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
-import google
-from google import genai
-from google.genai import types
 import hashlib
 import json
 import MySQLdb.cursors
+import numpy as np
+import onnxruntime as ort
 import re
 import requests
+from transformers import AutoTokenizer
 
 app = Flask(__name__, static_folder="static", static_url_path="/")
 
@@ -34,12 +34,38 @@ params = {
     'key': weatherapi_key
 }
 
-# Gemini
-client = genai.Client(api_key="AIzaSyAZq1zZxpT7UKEfgGgrrziU0PmNbTMFzyA")
-model = "gemini-2.5-flash"
-config = types.GenerateContentConfig(
-    thinking_config=types.ThinkingConfig(thinking_budget=512)
-)
+# LLM ONNX
+tokenizer = AutoTokenizer.from_pretrained("../pythia14m-onnx")
+session = ort.InferenceSession("../pythia14m-onnx/model.onnx")
+
+def onnx_text_generator(prompt, max_new_tokens=20):
+    inputs = tokenizer(prompt, return_tensors="np")
+    input_ids = inputs["input_ids"]
+    attention_mask = inputs["attention_mask"]
+    position_ids = np.arange(input_ids.shape[1], dtype=np.int64).reshape(1, -1)
+
+    for _ in range(max_new_tokens):
+        ort_inputs = {
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "position_ids": position_ids,
+        }
+        outputs = session.run(None, ort_inputs)
+
+        # Get logits of the last token
+        next_token_logits = outputs[0][:, -1, :]
+        next_token_id = np.argmax(next_token_logits, axis=-1).reshape(1, 1)
+
+        # Append next token
+        input_ids = np.concatenate([input_ids, next_token_id], axis=-1)
+
+        # Update attention mask and position ids
+        attention_mask = np.concatenate(
+            [attention_mask, np.ones((1, 1), dtype=np.int64)], axis=1
+        )
+        position_ids = np.arange(input_ids.shape[1], dtype=np.int64).reshape(1, -1)
+
+    return tokenizer.decode(input_ids[0])
 
 @app.route('/')
 def index():
@@ -104,6 +130,10 @@ def index():
         for h in forecastday['hour']:
             hourly_weather.append(h)
 
+    # predict further forecast
+    # prompt = ""
+    # response = onnx_text_generator(prompt, 100)
+
     return render_template('index.html',
                             username=session['username'],
                             current_icon=current_icon,
@@ -159,7 +189,6 @@ def getEvents():
     
     return json.dumps(events, separators=(',', ':'))
 
-# TODO: date recommendation
 @app.route('/recommendDate', methods=['POST'])
 def recommendDate():
     if 'loggedin' not in session:
@@ -190,20 +219,9 @@ def recommendDate():
         )
     prompt += "Please state the time first and then briefly state your reasoning."
 
-    try:
-        response = client.models.generate_content(
-            model=model,
-            contents=prompt,
-            config=config
-        )
+    response = onnx_text_generator(prompt, 100)
 
-        return response.text
-    except google.api_core.exceptions.ResourceExhausted as e:
-        return str(e)
-    except google.api_core.exceptions.GoogleAPIError as e:
-        return str(e)
-    except Exception as e:
-        return str(e)
+    return response.text
 
 @app.route('/addEvent', methods=['POST'])
 def addEvent():

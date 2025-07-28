@@ -216,14 +216,14 @@ def index():
 
     for i in range(72):
         hourly_weather.append({
-            'temp_c': temps_forecast[i],
-            'wind_kph': winds_forecast[i],
-            'humidity': humids_forecast[i],
-            'cloud': clouds_forecast[i],
-            'precip_mm': rains_forecast[i],
-            'chance_of_rain': rain_ps_forecast[i],
-            'snow_cm': snows_forecast[i],
-            'chance_of_snow': snow_ps_forecast[i]
+            'temp_c': temps_forecast.iloc[i],
+            'wind_kph': winds_forecast.iloc[i],
+            'humidity': humids_forecast.iloc[i],
+            'cloud': clouds_forecast.iloc[i],
+            'precip_mm': rains_forecast.iloc[i],
+            'chance_of_rain': rain_ps_forecast.iloc[i],
+            'snow_cm': snows_forecast.iloc[i],
+            'chance_of_snow': snow_ps_forecast.iloc[i]
         })
 
     return render_template('index.html',

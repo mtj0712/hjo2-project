@@ -218,14 +218,26 @@
             eventClick: function(info) {
                 var extendedProps = info.event.extendedProps;
                 if (extendedProps.temp) {
-                    alert(
-                        `Temperature: ${extendedProps.temp} °C\n`
-                        + `Wind: ${extendedProps.windSpeed} km/h, ${extendedProps.windDegree}° (${extendedProps.windDir})\n`
-                        + `Humidity: ${extendedProps.humidity}%\n`
-                        + `Cloud: ${extendedProps.cloud}%\n`
-                        + `Rain: ${extendedProps.precip} mm, ${extendedProps.chanceOfRain}% chance\n`
-                        + `Snow: ${extendedProps.snow} cm, ${extendedProps.chanceOfSnow}% chance`
-                    );
+                    if (extendedProps.windDir) {
+                        alert(
+                            `Temperature: ${extendedProps.temp.toFixed(2)} °C\n`
+                            + `Wind: ${extendedProps.windSpeed.toFixed(2)} km/h, ${extendedProps.windDegree}° (${extendedProps.windDir})\n`
+                            + `Humidity: ${extendedProps.humidity.toFixed(2)}%\n`
+                            + `Cloud: ${extendedProps.cloud.toFixed(2)}%\n`
+                            + `Rain: ${extendedProps.precip.toFixed(2)} mm, ${extendedProps.chanceOfRain.toFixed(2)}% chance\n`
+                            + `Snow: ${extendedProps.snow.toFixed(2)} cm, ${extendedProps.chanceOfSnow.toFixed(2)}% chance`
+                        );
+                    } else {
+                        alert(
+                            `Temperature: ${extendedProps.temp.toFixed(2)} °C\n`
+                            + `Wind: ${extendedProps.windSpeed.toFixed(2)} km/h\n`
+                            + `Humidity: ${extendedProps.humidity.toFixed(2)}%\n`
+                            + `Cloud: ${extendedProps.cloud.toFixed(2)}%\n`
+                            + `Rain: ${extendedProps.precip.toFixed(2)} mm, ${extendedProps.chanceOfRain.toFixed(2)}% chance\n`
+                            + `Snow: ${extendedProps.snow.toFixed(2)} cm, ${extendedProps.chanceOfSnow.toFixed(2)}% chance`
+                        );
+                    }
+
                     return;
                 }
 

@@ -13,17 +13,22 @@ from transformers import AutoTokenizer
 app = Flask(__name__, static_folder="static", static_url_path="/")
 
 # MysQL
-app.secret_key = 'edHHfH3w4L'
+with open('/home/hjo2/.mysql_key', 'r') as f:
+    app.secret_key = f.read()
 
 app.config['MYSQL_HOST'] = 'hjo2.mysql.pythonanywhere-services.com'
 app.config['MYSQL_USER'] = 'hjo2'
-app.config['MYSQL_PASSWORD'] = '_y?03dh5ReMD'
+
+with open('/home/hjo2/.mysql_pwd', 'r') as f:
+    app.config['MYSQL_PASSWORD'] = f.read()
+
 app.config['MYSQL_DB'] = 'hjo2$account'
 
 mysql = MySQL(app)
 
 # WeatherAPI
-weatherapi_key = "721cd28a95b849ff90f32123232403"
+with open('/home/hjo2/.weatherapi_key', 'r') as f:
+    weatherapi_key = f.read()
 
 realtime_url = "https://api.weatherapi.com/v1/current.json"
 history_url = "https://api.weatherapi.com/v1/history.json"

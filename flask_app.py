@@ -16,13 +16,13 @@ app = Flask(__name__, static_folder="static", static_url_path="/")
 
 # MysQL
 with open('/home/hjo2/.mysql_key', 'r') as f:
-    app.secret_key = f.read()
+    app.secret_key = f.read().strip()
 
 app.config['MYSQL_HOST'] = 'hjo2.mysql.pythonanywhere-services.com'
 app.config['MYSQL_USER'] = 'hjo2'
 
 with open('/home/hjo2/.mysql_pwd', 'r') as f:
-    app.config['MYSQL_PASSWORD'] = f.read()
+    app.config['MYSQL_PASSWORD'] = f.read().strip()
 
 app.config['MYSQL_DB'] = 'hjo2$account'
 
@@ -30,7 +30,7 @@ mysql = MySQL(app)
 
 # WeatherAPI
 with open('/home/hjo2/.weatherapi_key', 'r') as f:
-    weatherapi_key = f.read()
+    weatherapi_key = f.read().strip()
 
 realtime_url = "https://api.weatherapi.com/v1/current.json"
 history_url = "https://api.weatherapi.com/v1/history.json"

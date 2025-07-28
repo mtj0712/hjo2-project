@@ -52,7 +52,7 @@
             cloud: hourly_weather[i].cloud,
             backgroundColor: 'white'
         });
-        if (hourly_weather[i].condition.icon) {
+        if ('condition' in hourly_weather[i]) {
             weatherEvents[weatherEvents.length - 1].icon = 'https:' + hourly_weather[i].condition.icon
         }
         weatherTime.setHours(weatherTime.getHours() + 1);

@@ -35,8 +35,8 @@ params = {
 }
 
 # LLM ONNX
-tokenizer = AutoTokenizer.from_pretrained("../falcon-rw-1b-onnx", use_fast=False)
-inference_session = ort.InferenceSession("../falcon-rw-1b-onnx/model_quant.onnx")
+tokenizer = AutoTokenizer.from_pretrained("/home/hjo2/falcon-rw-1b-onnx", use_fast=False)
+inference_session = ort.InferenceSession("/home/hjo2/falcon-rw-1b-onnx/model_quant.onnx")
 
 def onnx_text_generator(prompt, max_new_tokens=50):
     inputs = tokenizer(prompt, return_tensors="np")

@@ -36,7 +36,7 @@ params = {
 
 # LLM ONNX
 tokenizer = AutoTokenizer.from_pretrained("/home/hjo2/pythia14m-onnx")
-session = ort.InferenceSession("/home/hjo2/pythia14m-onnx/model.onnx")
+inference_session = ort.InferenceSession("/home/hjo2/pythia14m-onnx/model.onnx")
 
 def onnx_text_generator(prompt, max_new_tokens=20):
     inputs = tokenizer(prompt, return_tensors="np")
@@ -50,7 +50,7 @@ def onnx_text_generator(prompt, max_new_tokens=20):
             "attention_mask": attention_mask,
             "position_ids": position_ids,
         }
-        outputs = session.run(None, ort_inputs)
+        outputs = inference_session.run(None, ort_inputs)
 
         # Get logits of the last token
         next_token_logits = outputs[0][:, -1, :]

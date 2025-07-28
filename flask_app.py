@@ -220,9 +220,7 @@ def recommendDate():
         )
     prompt += "Please state the time first and then briefly state your reasoning."
 
-    response = onnx_text_generator(prompt, 100)
-
-    return response.text
+    return onnx_text_generator(prompt, 100)
 
 @app.route('/addEvent', methods=['POST'])
 def addEvent():

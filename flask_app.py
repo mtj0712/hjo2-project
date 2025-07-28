@@ -39,10 +39,15 @@ tokenizer = AutoTokenizer.from_pretrained("/home/hjo2/pythia14m-onnx")
 inference_session = ort.InferenceSession("/home/hjo2/pythia14m-onnx/model.onnx")
 
 def onnx_text_generator(prompt, max_new_tokens=20):
+    MAX_LEN = 2048  
     inputs = tokenizer(prompt, return_tensors="np")
     input_ids = inputs["input_ids"]
     attention_mask = inputs["attention_mask"]
     position_ids = np.arange(input_ids.shape[1], dtype=np.int64).reshape(1, -1)
+
+    if input_ids.shape[1] > MAX_LEN:
+        input_ids = input_ids[:, -MAX_LEN:]
+        attention_mask = attention_mask[:, -MAX_LEN:]
 
     for _ in range(max_new_tokens):
         ort_inputs = {

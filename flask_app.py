@@ -35,42 +35,33 @@ params = {
 }
 
 # LLM ONNX
-tokenizer = AutoTokenizer.from_pretrained("/home/hjo2/pythia14m-onnx")
-inference_session = ort.InferenceSession("/home/hjo2/pythia14m-onnx/model.onnx")
+tokenizer = AutoTokenizer.from_pretrained("../falcon-rw-1b-onnx", use_fast=False)
+inference_session = ort.InferenceSession("../falcon-rw-1b-onnx/model_quant.onnx")
 
-def onnx_text_generator(prompt, max_new_tokens=20):
-    MAX_LEN = 2048 - max_new_tokens
+def onnx_text_generator(prompt, max_new_tokens=50):
     inputs = tokenizer(prompt, return_tensors="np")
     input_ids = inputs["input_ids"]
     attention_mask = inputs["attention_mask"]
-    position_ids = np.arange(input_ids.shape[1], dtype=np.int64).reshape(1, -1)
-
-    if input_ids.shape[1] > MAX_LEN:
-        input_ids = input_ids[:, -MAX_LEN:]
-        attention_mask = attention_mask[:, -MAX_LEN:]
 
     for _ in range(max_new_tokens):
+        if input_ids.shape[1] >= 2048:
+            break  # Falcon max
+
         ort_inputs = {
             "input_ids": input_ids,
             "attention_mask": attention_mask,
-            "position_ids": position_ids,
         }
-        outputs = inference_session.run(None, ort_inputs)
 
-        # Get logits of the last token
+        outputs = inference_session.run(None, ort_inputs)
         next_token_logits = outputs[0][:, -1, :]
         next_token_id = np.argmax(next_token_logits, axis=-1).reshape(1, 1)
 
-        # Append next token
-        input_ids = np.concatenate([input_ids, next_token_id], axis=-1)
-
-        # Update attention mask and position ids
+        input_ids = np.concatenate([input_ids, next_token_id], axis=1)
         attention_mask = np.concatenate(
             [attention_mask, np.ones((1, 1), dtype=np.int64)], axis=1
         )
-        position_ids = np.arange(input_ids.shape[1], dtype=np.int64).reshape(1, -1)
 
-    return tokenizer.decode(input_ids[0])
+    return tokenizer.decode(input_ids[0], skip_special_tokens=True)
 
 @app.route('/')
 def index():

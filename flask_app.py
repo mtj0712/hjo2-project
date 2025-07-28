@@ -6,8 +6,10 @@ import json
 import MySQLdb.cursors
 import numpy as np
 import onnxruntime as ort
+import pandas as pd
 import re
 import requests
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 from transformers import AutoTokenizer
 
 app = Flask(__name__, static_folder="static", static_url_path="/")
@@ -98,6 +100,14 @@ def index():
     next_three_days_icons = []
 
     hourly_weather = []
+    temps = []
+    winds = []
+    humids = []
+    clouds = []
+    rains = []
+    rain_ps = []
+    snows = []
+    snow_ps = []
 
     for i in range(1, 8):
         params['dt'] = str(today - timedelta(days=i))
@@ -107,6 +117,14 @@ def index():
         past_week_icons.append(forecastday['day']['condition']['icon'])
         for h in forecastday['hour']:
             hourly_weather.append(h)
+            temps.append(h['temp_c'])
+            winds.append(h['wind_kph'])
+            humids.append(h['humidity'])
+            clouds.append(h['cloud'])
+            rains.append(h['precip_mm'])
+            rain_ps.append(h['chance_of_rain'])
+            snows.append(h['snow_cm'])
+            snow_ps.append(h['chance_of_snow'])
 
     params['dt'] = str(today)
     history_response = requests.get(url=history_url, params=params)
@@ -115,12 +133,28 @@ def index():
     if len(history_data['forecast']['forecastday']) != 0:
         for h in history_data['forecast']['forecastday'][0]['hour']:
             hourly_weather.append(h)
+            temps.append(h['temp_c'])
+            winds.append(h['wind_kph'])
+            humids.append(h['humidity'])
+            clouds.append(h['cloud'])
+            rains.append(h['precip_mm'])
+            rain_ps.append(h['chance_of_rain'])
+            snows.append(h['snow_cm'])
+            snow_ps.append(h['chance_of_snow'])
     else:
         params['dt'] = str(today)
         forecast_response = requests.get(url=forecast_url, params=params)
         forecast_data = forecast_response.json()
         for h in forecast_data['forecast']['forecastday'][0]['hour']:
             hourly_weather.append(h)
+            temps.append(h['temp_c'])
+            winds.append(h['wind_kph'])
+            humids.append(h['humidity'])
+            clouds.append(h['cloud'])
+            rains.append(h['precip_mm'])
+            rain_ps.append(h['chance_of_rain'])
+            snows.append(h['snow_cm'])
+            snow_ps.append(h['chance_of_snow'])
 
     for i in range(1, 4):
         params['dt'] = str(today + timedelta(days=i))
@@ -130,10 +164,67 @@ def index():
         next_three_days_icons.append(forecastday['day']['condition']['icon'])
         for h in forecastday['hour']:
             hourly_weather.append(h)
+            temps.append(h['temp_c'])
+            winds.append(h['wind_kph'])
+            humids.append(h['humidity'])
+            clouds.append(h['cloud'])
+            rains.append(h['precip_mm'])
+            rain_ps.append(h['chance_of_rain'])
+            snows.append(h['snow_cm'])
+            snow_ps.append(h['chance_of_snow'])
 
     # predict further forecast
-    # prompt = ""
-    # response = onnx_text_generator(prompt, 100)
+    series = pd.Series(temps)
+    model = SARIMAX(series, order=(1, 1, 1), seasonal_order=(1, 1, 1, 24))
+    results = model.fit(disp=False)
+    temps_forecast = results.forecast(steps=72)
+
+    series = pd.Series(winds)
+    model = SARIMAX(series, order=(1, 1, 1), seasonal_order=(1, 1, 1, 24))
+    results = model.fit(disp=False)
+    winds_forecast = results.forecast(steps=72)
+
+    series = pd.Series(humids)
+    model = SARIMAX(series, order=(1, 1, 1), seasonal_order=(1, 1, 1, 24))
+    results = model.fit(disp=False)
+    humids_forecast = results.forecast(steps=72)
+
+    series = pd.Series(clouds)
+    model = SARIMAX(series, order=(1, 1, 1), seasonal_order=(1, 1, 1, 24))
+    results = model.fit(disp=False)
+    clouds_forecast = results.forecast(steps=72)
+
+    series = pd.Series(rains)
+    model = SARIMAX(series, order=(1, 1, 1), seasonal_order=(1, 1, 1, 24))
+    results = model.fit(disp=False)
+    rains_forecast = results.forecast(steps=72)
+
+    series = pd.Series(rain_ps)
+    model = SARIMAX(series, order=(1, 1, 1), seasonal_order=(1, 1, 1, 24))
+    results = model.fit(disp=False)
+    rain_ps_forecast = results.forecast(steps=72)
+
+    series = pd.Series(snows)
+    model = SARIMAX(series, order=(1, 1, 1), seasonal_order=(1, 1, 1, 24))
+    results = model.fit(disp=False)
+    snows_forecast = results.forecast(steps=72)
+
+    series = pd.Series(snow_ps)
+    model = SARIMAX(series, order=(1, 1, 1), seasonal_order=(1, 1, 1, 24))
+    results = model.fit(disp=False)
+    snow_ps_forecast = results.forecast(steps=72)
+
+    for i in range(72):
+        hourly_weather.append({
+            'temp_c': temps_forecast[i],
+            'wind_kph': winds_forecast[i],
+            'humidity': humids_forecast[i],
+            'cloud': clouds_forecast[i],
+            'precip_mm': rains_forecast[i],
+            'chance_of_rain': rain_ps_forecast[i],
+            'snow_cm': snows_forecast[i],
+            'chance_of_snow': snow_ps_forecast[i]
+        })
 
     return render_template('index.html',
                             username=session['username'],
@@ -469,6 +560,3 @@ def register():
         error_msg = 'Please fill out the form!'
 
     return render_template('register.html', error_msg=error_msg)
-
-if __name__ == '__main__':
-    app.run(debug=True)

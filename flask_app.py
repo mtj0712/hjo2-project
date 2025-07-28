@@ -35,8 +35,8 @@ params = {
 }
 
 # LLM ONNX
-tokenizer = AutoTokenizer.from_pretrained("../pythia14m-onnx")
-session = ort.InferenceSession("../pythia14m-onnx/model.onnx")
+tokenizer = AutoTokenizer.from_pretrained("/home/hjo2/pythia14m-onnx")
+session = ort.InferenceSession("/home/hjo2/pythia14m-onnx/model.onnx")
 
 def onnx_text_generator(prompt, max_new_tokens=20):
     inputs = tokenizer(prompt, return_tensors="np")
